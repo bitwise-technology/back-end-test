@@ -34,7 +34,7 @@ Basicamente você tem a responsabilidade de criar uma Restful API usando a [API 
   - Crie um ou mais endpoints para atualizar as informaçoes do usuário  
 - Consultar informaçoes de um determinado usúario por email ou username
   - Crie um ou mais endpoints para consultar as informaçoes cadastradas
-  - Ao consultar o perfil do usuário cadastrado, realizar consulta no api do github e adicionar as seguinte infomrações caso o usuário possua uma conta: Quantidade de Followers, Quantidade de Following, Quantidade de repositorios publicos, URL publica para o profile desse usuário no Github.
+  - Ao consultar o perfil do usuário cadastrado, realizar consulta no api do github e adicionar as seguinte informações caso o usuário possua uma conta: Quantidade de Followers, Quantidade de Following, Quantidade de repositorios publicos, URL publica para o profile desse usuário no Github.
 
 ```
 Definição da Entidade: 
