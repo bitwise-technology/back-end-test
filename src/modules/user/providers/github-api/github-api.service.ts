@@ -7,7 +7,8 @@ import {
   GithubResponseUserMetrics,
   GithubUser,
   GithubUserMetrics,
-  GraphqlResponse
+  GraphqlResponse,
+  SeachUserByString
 } from '../../model';
 
 @Injectable()
@@ -125,6 +126,51 @@ export class GithubApiService {
               data: { user }
             }
           }) => user
+        )
+      );
+  }
+
+  /**
+   * Pega uma lista de usuários a partir do seu nome
+   * @param login login do usuário
+   */
+  public getUsersByQuery(login: string, limit = 50): Observable<GithubUser[]> {
+    const headers = this.getHeaders();
+    const body = this.getBodyGraphql(
+      `query getUsersByLogin($login : String!, $limit: Int!){
+        search(type:USER,first:$limit,query:$login){
+            nodes {
+                ... on User{
+                    name
+                    avatarUrl
+                    email
+                    login
+                    bio
+                }
+            }
+        }
+      }
+      `,
+      { login, limit }
+    );
+
+    return this.httpClient
+      .post<GraphqlResponse<SeachUserByString>>(
+        this.GITHUB_API_URL,
+        JSON.stringify(body),
+        {
+          headers
+        }
+      )
+      .pipe(
+        map(
+          ({
+            data: {
+              data: {
+                search: { nodes }
+              }
+            }
+          }) => nodes
         )
       );
   }
