@@ -3,13 +3,20 @@ import { HttpService, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { GithubUser, GraphqlResponse } from '../../model';
-
-const GITHUB_API_URL = 'https://api.github.com/graphql';
+import {
+  GithubResponseUserMetrics,
+  GithubUser,
+  GithubUserMetrics,
+  GraphqlResponse
+} from '../../model';
 
 @Injectable()
 export class GithubApiService {
   public constructor(protected httpClient: HttpService) {}
+  /**
+   * URL de acesso a api do github
+   */
+  private GITHUB_API_URL = 'https://api.github.com/graphql';
 
   private getHeaders() {
     return { Authorization: `bearer ${process.env.O_AUTH_TOKEN}` };
@@ -18,12 +25,70 @@ export class GithubApiService {
   protected getBodyGraphql(
     query: string,
     variables?: { [key: string]: any }
-  ): { query: string; variables: any } {
+  ): { query: string; variables?: { [key: string]: any } } {
     const body = {
       query,
       variables
     };
-    return body;
+    return { ...body };
+  }
+
+  /**
+   * Baixa as informações do usuário
+   * @param login login de acesso ao usuário
+   */
+  public getUserMetrics(login: string) {
+    const headers = this.getHeaders();
+
+    const body = this.getBodyGraphql(
+      `
+       query getDetailProfile($login:String!){
+         user(login:$login){
+           url 
+           
+           repositories {
+             totalCount
+           }
+           followers {
+             totalCount
+           }
+           
+           following {
+             totalCount
+           }
+        }
+      }
+      `,
+      { login }
+    );
+
+    return this.httpClient
+      .post<GraphqlResponse<GithubResponseUserMetrics>>(
+        this.GITHUB_API_URL,
+        JSON.stringify(body),
+        {
+          headers
+        }
+      )
+      .pipe(
+        map(
+          ({
+            data: {
+              data: { user }
+            }
+          }) => user
+        ),
+
+        map(user => {
+          if (!user) return null;
+          return {
+            totalFollowers: user.followers.totalCount,
+            totalFollowing: user.following.totalCount,
+            totalPublicRepositories: user.repositories.totalCount,
+            profileUrl: user.url
+          } as GithubUserMetrics;
+        })
+      );
   }
 
   /**
@@ -46,9 +111,13 @@ export class GithubApiService {
       { login }
     );
     return this.httpClient
-      .post<GraphqlResponse<GithubUser>>(GITHUB_API_URL, JSON.stringify(body), {
-        headers
-      })
+      .post<GraphqlResponse<GithubUser>>(
+        this.GITHUB_API_URL,
+        JSON.stringify(body),
+        {
+          headers
+        }
+      )
       .pipe(
         map(
           ({
