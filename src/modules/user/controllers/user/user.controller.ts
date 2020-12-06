@@ -4,6 +4,7 @@ import {
   Res,
   Post,
   Body,
+  Query,
   Param,
   UsePipes,
   HttpStatus,
@@ -37,8 +38,11 @@ export class UserController {
    * Lista todos os usuários salvos
    */
   @Get()
-  public listAllUsers(): Observable<DefaultResponse> {
-    const promise = this.userService.findAll();
+  public listAllUsers(
+    @Query('limit') limit?: number,
+    @Query('offset') offset?: number
+  ): Observable<DefaultResponse> {
+    const promise = this.userService.findAll(limit, offset);
     return this.mapToResponse(promise);
   }
 
@@ -170,6 +174,15 @@ export class UserController {
         );
       })
     );
+  }
+
+  @Get('search/:nome')
+  public getUsersByUsername(
+    @Param('nome') nome: string,
+    @Query('limit', ParseIntPipe) limit?: number,
+    @Query('offset', ParseIntPipe) offset?: number
+  ) {
+    return this.userService.findUsersWithSimilarName(nome, limit, offset);
   }
 
   /**
