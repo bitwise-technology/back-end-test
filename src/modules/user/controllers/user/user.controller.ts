@@ -165,7 +165,7 @@ export class UserController {
           );
 
         return this.mapToResponse(
-          this.githubApiService.getUserMetrics(user.username).pipe(
+          this.githubApiService.getUserMetrics(user.githubLogin).pipe(
             map(userMetrics => ({
               ...user,
               githubMetrics: userMetrics || undefined

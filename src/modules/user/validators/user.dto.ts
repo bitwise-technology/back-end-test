@@ -57,8 +57,8 @@ export class UserDTO {
   profileImageUrl: string;
 
   @MinLength(3, { message: 'Bio must contain at least 3 characters' })
-  @MaxLength(30, {
-    message: 'Bio must contain a maximum of 30 characters'
+  @MaxLength(155, {
+    message: 'Bio must contain a maximum of 155 characters'
   })
   @IsOptional()
   bio: string;
@@ -72,6 +72,10 @@ export class UserDTO {
   @IsOptional()
   gender: USER_GENDER;
 
+  @IsString()
+  @IsOptional()
+  githubLogin?: string;
+
   /**
    * Retorna uma entidade de UserDto mapeado apartir dos valores recuperados
    * da api do github
@@ -79,7 +83,8 @@ export class UserDTO {
    */
   static assignGithubUser(values: GithubUser): UserDTO {
     const user = new UserDTO();
-    user.name = values.name;
+    user.name = values.name || values.login;
+    user.githubLogin = values.login;
     user.username = values.login;
     user.profileImageUrl = values.avatarUrl;
     user.email = values.email;
