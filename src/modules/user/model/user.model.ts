@@ -41,11 +41,11 @@ export class User {
     name: 'bio',
     nullable: true,
     type: 'varchar',
-    length: 30
+    length: 155
   })
   bio?: string;
 
-  @Column({ unique: true, name: 'email' })
+  @Column({ name: 'email', nullable: true })
   email: string;
 
   @Column({
