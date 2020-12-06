@@ -24,6 +24,11 @@ export interface GithubUserMetrics {
    */
   profileUrl: string;
 }
+
+export interface SeachUserByString {
+  nodes: GithubUser[];
+}
+
 /**
  * resposta do github para a query de pegar informações
  * métricas sobre o usuário

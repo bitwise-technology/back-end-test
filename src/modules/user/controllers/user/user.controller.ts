@@ -1,6 +1,7 @@
 import {
   Get,
   Put,
+  Res,
   Post,
   Body,
   Param,
@@ -12,8 +13,9 @@ import {
   ValidationPipe
 } from '@nestjs/common';
 
+import { Response } from 'express';
 import { Observable } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap, tap } from 'rxjs/operators';
 
 import { User } from '../../model';
 import { UserService } from '../../providers';
@@ -51,15 +53,45 @@ export class UserController {
     return this.mapToResponse(promise);
   }
 
+  /**
+   * Faz o cadastro do usuário com o username do github
+   * @param data body da requisição
+   * @param response response que será retornado ao cliente
+   */
   @Post('register/github')
   @UsePipes(new ValidationPipe({ transform: true }))
   public inserWithUsernameGithub(
-    @Body() data: GithubRegisterDTO
-  ): Observable<DefaultResponse> {
-    return this.githubApiService.getUserInfo(data.username).pipe(
+    @Body() data: GithubRegisterDTO,
+    @Res() response: Response
+  ) {
+    const { username } = data;
+
+    return this.githubApiService.getUserInfo(username).pipe(
       mergeMap(gitHubUser => {
+        if (!gitHubUser) {
+          return this.githubApiService.getUsersByQuery(username).pipe(
+            map(availableUsers => ({
+              message: 'User not found on github',
+              code: HttpStatus.NOT_FOUND,
+              availableUsers
+            })),
+            tap(result =>
+              response
+                .status(HttpStatus.NOT_FOUND)
+                .json(result)
+                .send()
+            )
+          );
+        }
         const user = UserDTO.assignGithubUser(gitHubUser);
-        return this.inserNewUser(user);
+        return this.inserNewUser(user).pipe(
+          tap(result =>
+            response
+              .status(HttpStatus.CREATED)
+              .json(result)
+              .send()
+          )
+        );
       })
     );
   }
