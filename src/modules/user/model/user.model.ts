@@ -48,6 +48,12 @@ export class User {
   @Column({ unique: true, name: 'email' })
   email: string;
 
+  @Column({
+    type: 'varchar',
+    nullable: true
+  })
+  githubLogin?: string;
+
   @Column({ enum: USER_GENDER, default: USER_GENDER.NOT_SPECIFIED })
   gender: USER_GENDER;
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
+import { from, Observable } from 'rxjs';
 import { Repository } from 'typeorm';
 
 import { User } from '../../model';
@@ -13,37 +14,41 @@ export class UserService {
     private usersRepository: Repository<User>
   ) {}
 
-  insert(user: UserDTO): Promise<User> {
+  insert(user: UserDTO): Observable<User> {
     const createdUser = this.usersRepository.create({ ...user });
-    return this.usersRepository.save(createdUser);
+    return from(this.usersRepository.save(createdUser));
   }
 
-  findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  findAll(): Observable<User[]> {
+    return from(this.usersRepository.find());
   }
 
-  findOne(id: number | string): Promise<User> {
-    return this.usersRepository.findOne(id);
+  findOne(id: number | string): Observable<User> {
+    return from(this.usersRepository.findOne(id));
   }
 
-  update(user: UserDTO): Promise<User> {
+  update(user: UserDTO): Observable<User> {
     this.usersRepository.update(user.id, { ...user });
-    return this.usersRepository.findOne(user.id);
+    return from(this.usersRepository.findOne(user.id));
   }
 
-  public findByEmail(email: string) {
-    return this.usersRepository.findOne({
-      where: {
-        email
-      }
-    });
+  public findByEmail(email: string): Observable<User> {
+    return from(
+      this.usersRepository.findOne({
+        where: {
+          email
+        }
+      })
+    );
   }
 
-  public findByUsername(username: string) {
-    return this.usersRepository.findOne({
-      where: {
-        username
-      }
-    });
+  public findByUsername(username: string): Observable<User> {
+    return from(
+      this.usersRepository.findOne({
+        where: {
+          username
+        }
+      })
+    );
   }
 }
