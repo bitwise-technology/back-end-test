@@ -11,7 +11,7 @@ import {
   IsEnum
 } from 'class-validator';
 
-import { USER_GENDER } from '../model';
+import { GithubUser, USER_GENDER } from '../model';
 
 /**
  * Classe de validação de usuário para inserir
@@ -71,4 +71,19 @@ export class UserDTO {
   })
   @IsOptional()
   gender: USER_GENDER;
+
+  /**
+   * Retorna uma entidade de UserDto mapeado apartir dos valores recuperados
+   * da api do github
+   * @param values valores recuperados do github
+   */
+  static assignGithubUser(values: GithubUser): UserDTO {
+    const user = new UserDTO();
+    user.name = values.name;
+    user.username = values.login;
+    user.profileImageUrl = values.avatarUrl;
+    user.email = values.email;
+    user.bio = values.bio;
+    return user;
+  }
 }
