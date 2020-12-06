@@ -12,7 +12,7 @@ import {
   ValidationPipe
 } from '@nestjs/common';
 
-import { from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 
 import { User } from '../../model';
@@ -21,7 +21,8 @@ import { GithubApiService } from '../../providers/github-api/github-api.service'
 import { UserUpdateDTO, UserDTO, GithubRegisterDTO } from '../../validators';
 
 export interface DefaultResponse {
-  users: User[] | User;
+  users?: User[];
+  user?: User;
 }
 
 @Controller('users')
@@ -89,7 +90,7 @@ export class UserController {
     const promise = this.userService.findByEmail(email);
     return this.mapToResponse(promise).pipe(
       map(response => {
-        if (response.users) return response.users;
+        if (response.users) return response;
 
         throw new HttpException(
           { message: 'User NOT Found' },
@@ -103,7 +104,7 @@ export class UserController {
   public getUserByUsername(@Param('username') username: string) {
     return this.mapToResponse(this.userService.findByUsername(username)).pipe(
       map(response => {
-        if (response.users) return response.users;
+        if (response.users) return response;
 
         throw new HttpException(
           { message: 'User NOT Found' },
@@ -113,7 +114,43 @@ export class UserController {
     );
   }
 
-  protected mapToResponse(value: Promise<User | User[]>) {
-    return from(value).pipe(map(users => ({ users })));
+  /**
+   * Recupera as informações do usuário
+   * @param id identificador do usuário
+   */
+  @Get('/:id/profile')
+  public getUserProfile(@Param('id', ParseIntPipe) id: string | number) {
+    return this.userService.findOne(id).pipe(
+      mergeMap(user => {
+        if (!user)
+          throw new HttpException(
+            { message: 'User not found' },
+            HttpStatus.NOT_FOUND
+          );
+
+        return this.mapToResponse(
+          this.githubApiService.getUserMetrics(user.username).pipe(
+            map(userMetrics => ({
+              ...user,
+              githubMetrics: userMetrics || undefined
+            }))
+          )
+        );
+      })
+    );
+  }
+
+  /**
+   * Cria um endpoint comum para as respostas do
+   * @param value valor a ser usado no endpoint
+   */
+  protected mapToResponse(value: Observable<User | User[]>) {
+    return value.pipe(
+      map(response => {
+        if (Array.isArray(response)) return { users: response };
+
+        return { user: response };
+      })
+    );
   }
 }
