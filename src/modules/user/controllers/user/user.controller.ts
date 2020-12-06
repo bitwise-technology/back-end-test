@@ -13,11 +13,12 @@ import {
 } from '@nestjs/common';
 
 import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 
 import { User } from '../../model';
 import { UserService } from '../../providers';
-import { UserUpdateDTO, UserDTO } from '../../validators';
+import { GithubApiService } from '../../providers/github-api/github-api.service';
+import { UserUpdateDTO, UserDTO, GithubRegisterDTO } from '../../validators';
 
 export interface DefaultResponse {
   users: User[] | User;
@@ -25,7 +26,10 @@ export interface DefaultResponse {
 
 @Controller('users')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private githubApiService: GithubApiService
+  ) {}
   /**
    * Lista todos os usuários salvos
    */
@@ -44,6 +48,19 @@ export class UserController {
   public inserNewUser(@Body() user: UserDTO) {
     const promise = this.userService.insert(user);
     return this.mapToResponse(promise);
+  }
+
+  @Post('register/github')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  public inserWithUsernameGithub(
+    @Body() data: GithubRegisterDTO
+  ): Observable<DefaultResponse> {
+    return this.githubApiService.getUserInfo(data.username).pipe(
+      mergeMap(gitHubUser => {
+        const user = UserDTO.assignGithubUser(gitHubUser);
+        return this.inserNewUser(user);
+      })
+    );
   }
 
   /**
