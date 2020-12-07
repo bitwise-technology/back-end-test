@@ -126,7 +126,8 @@ export class UserController {
     const promise = this.userService.findByEmail(email);
     return this.mapToResponse(promise).pipe(
       map(response => {
-        if (response.users) return response;
+        console.log(response);
+        if (response.user) return response;
 
         throw new HttpException(
           { message: 'User NOT Found' },
@@ -140,7 +141,7 @@ export class UserController {
   public getUserByUsername(@Param('username') username: string) {
     return this.mapToResponse(this.userService.findByUsername(username)).pipe(
       map(response => {
-        if (response.users) return response;
+        if (response.user) return response;
 
         throw new HttpException(
           { message: 'User NOT Found' },
