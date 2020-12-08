@@ -20,7 +20,7 @@ export class GithubApiService {
   private GITHUB_API_URL = 'https://api.github.com/graphql';
 
   private getHeaders() {
-    return { Authorization: `bearer ${process.env.O_AUTH_TOKEN}` };
+    return { Authorization: `bearer ${process.env.GITHUB_O_AUTH_TOKEN}` };
   }
 
   protected getBodyGraphql(
