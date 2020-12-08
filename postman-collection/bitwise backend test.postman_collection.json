@@ -1,0 +1,307 @@
+{
+	"info": {
+		"_postman_id": "d698c2fd-0c4f-4fd5-821e-11590fc8d0d6",
+		"name": "bitwise backend test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "INSERT Usuário",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1f4e1ed4-1c9b-4b00-bfe0-7cfa8f773039",
+								"exec": [
+									"pm.test(\"Usuário salvo com sucesso\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var data = pm.response.json();",
+									"",
+									"pm.environment.set(\"renatosilva_id\", data.user.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"renatosilva\",\n    \"name\": \"Renato\",\n    \"email\":\"renato12@email.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							]
+						},
+						"description": "Insere um usuário diretamente no banco de dados"
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE Usuário",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5a8d230e-b896-496c-9437-0f16985e5ce8",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": {{renatosilva_id}},\n    \"username\": \"renatoalterado\",\n    \"name\": \"renato\",\n    \"lastName\": \"silva\",\n    \"profileImageUrl\": null,\n    \"bio\": \"Desenvolvedor apaixonado por Typescript e projetos OpenSource \",\n    \"email\": \"renato123@email.com\",\n    \"gender\": \"Male\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users/{{renatosilva_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"{{renatosilva_id}}"
+							]
+						},
+						"description": "Faz o update das informaçoes de usuário salvas"
+					},
+					"response": []
+				},
+				{
+					"name": "Registro com GitHub",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cb728ff1-56cd-49ca-b31b-54127439c2c4",
+								"exec": [
+									"pm.test(\"Usuário salvo com sucesso\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"const { user } = pm.response.json();",
+									"",
+									"pm.environment.set(\"hitalo_email\", user.email);",
+									"pm.environment.set(\"hitallo_username\", user.username)",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"hitallow\"\n}       ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users/register/github",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"register",
+								"github"
+							]
+						},
+						"description": "Faz o registro de um usuário o username do github"
+					},
+					"response": []
+				},
+				{
+					"name": "LIST Usuário por email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/email/{{hitalo_email}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"email",
+								"{{hitalo_email}}"
+							]
+						},
+						"description": "Busca um usuário pelo seu email salvo."
+					},
+					"response": []
+				},
+				{
+					"name": "LIST Usuário por username",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/username/{{hitallo_username}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"username",
+								"{{hitallo_username}}"
+							]
+						},
+						"description": "Busca um usuário pelo seu username"
+					},
+					"response": []
+				},
+				{
+					"name": "LIST Usuários",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users?limit=3&offset=0",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "3",
+									"description": "Quantidade máxima de usuários a serem retornados\n"
+								},
+								{
+									"key": "offset",
+									"value": "0",
+									"description": "Alvo da pesquisa"
+								}
+							]
+						},
+						"description": "Lista todos os usuários salvos"
+					},
+					"response": []
+				},
+				{
+					"name": "GET Profile usuário",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/1/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"profile"
+							]
+						},
+						"description": "Acessa as informaçoes de usuário cadastradas e suas informações do github"
+					},
+					"response": []
+				},
+				{
+					"name": "GET Usuários pelo nome",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/search/m?limit=5&offset=0",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"search",
+								"m"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5",
+									"description": "Quantidade máxima de usuários a serem pesquisados"
+								},
+								{
+									"key": "offset",
+									"value": "0",
+									"description": "Alvo da pesquisa"
+								}
+							]
+						},
+						"description": "Lista os usuários usando seu nome e comparando para cada usuário contem o nome repassado"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Server running",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b2702442-3223-448e-a72d-7cf50d294cab",
+						"exec": [
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"App running!\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}",
+					"host": [
+						"{{base_url}}"
+					]
+				},
+				"description": "Endpoint base para verificar se o servidor está rodando."
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
