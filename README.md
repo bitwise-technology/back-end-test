@@ -34,5 +34,9 @@ Depois de ter certeza que o node e o npm estão disponiveis na sua máquina e co
 2. No seu terminal rode `npm install` - instalará as dependencias do projeto.
 3. No seu terminal rode `npm start` - irá iniciar o servidor na porta 3000 da sua máquina.
 
+## Testes
 
-
+Para executar os testes da aplicação basta executar `npm test`.
+Para executar os testes com a cobertura de testes rode `npm run test:cov`.
+Para execuar os testes em modo assistido rode `npm run test:watch`.
+Para executar os dois ao mesmo tempo rode `npm test -- --coverage --watch`
