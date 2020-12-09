@@ -5,9 +5,9 @@ Meu e-mail é hitallo91@gmail.com
 
 ## Documentação da API
 
-Para acessar a documentação clique [aqui](https://www.apimatic.io/api-docs-preview/5fcd94b5b30de534542c67c8/docs#/http/api-endpoints/misc/get-server-running)
+Para acessar a documentação clique [aqui](https://app.swaggerhub.com/apis/hitallow/bitwise-backend_test/1.0)
 
-A documentação foi feita utilizando o site apimatic.io.
+A documentação foi feita utilizando o swagger
 
 ## Tecnologias utilizadas
 
