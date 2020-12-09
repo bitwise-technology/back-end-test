@@ -126,7 +126,6 @@ export class UserController {
     const promise = this.userService.findByEmail(email);
     return this.mapToResponse(promise).pipe(
       map(response => {
-        console.log(response);
         if (response.user) return response;
 
         throw new HttpException(
@@ -183,7 +182,9 @@ export class UserController {
     @Query('limit', ParseIntPipe) limit?: number,
     @Query('offset', ParseIntPipe) offset?: number
   ) {
-    return this.userService.findUsersWithSimilarName(nome, limit, offset);
+    return this.mapToResponse(
+      this.userService.findUsersWithSimilarName(nome, limit, offset)
+    );
   }
 
   /**
