@@ -8,7 +8,6 @@ import { UserModule } from './modules/user/user.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      logging: true,
       synchronize: true,
       database: 'data/dev-db.sqlite',
       entities: ['dist/**/*.model{.ts,.js}']
