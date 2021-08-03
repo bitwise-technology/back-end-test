@@ -1,0 +1,27 @@
+{
+  "name": "back-end-test",
+  "version": "1.0.0-SNAPSHOT",
+  "description": "RESTful API para cadastro de usuarios usando o Github GraphQL API",
+  "main": "app.ts",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josecarlosns/back-end-test.git"
+  },
+  "keywords": [
+    "rest",
+    "github",
+    "graphql"
+  ],
+  "author": "Jose Silva",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/josecarlosns/back-end-test/issues"
+  },
+  "homepage": "https://github.com/josecarlosns/back-end-test#readme"
+}
