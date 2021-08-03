@@ -1,7 +1,5 @@
-// import { expect } from 'chai';
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-// import { Pessoa, PessoaFisica, PessoaJuridica } from '../src/pessoa';
 import Usuario from '../src/model/Usuario';
 import buildUsuario from '../src/controller/usuarioBuilder';
 
@@ -94,25 +92,3 @@ describe("Módulo 'Usuário'", (): void => {
     }).to.throw();
   });
 });
-
-// describe('Módulo "Pessoa"', (): void => {
-//   it('"PessoaFisica" implementa "Pessoa" com sucesso', (): void => {
-//     const pessoa: Pessoa = new PessoaFisica(1, 'José', 'Silva', '07929909433');
-//     const info: string = pessoa.getInfo();
-
-//     expect(info)
-//       .to.be.equal.a('string')
-//       .and.to.be.equal.equal('PessoaFisica{id=1,nome=José,sobrenome=Silva,cpf=07929909433}');
-//   });
-
-//   it('"PessoaJuridica" implementa "Pessoa" com sucesso', (): void => {
-//     const pessoa: Pessoa = new PessoaJuridica(1, 'José', 'Silva', '11112222333344', 'José LTDA');
-//     const info: string = pessoa.getInfo();
-
-//     expect(info)
-//       .to.be.equal.a('string')
-//       .and.to.be.equal.equal(
-//         'PessoaJuridica{id=1,nome=José,sobrenome=Silva,cnpj=11112222333344,razaoSocial=José LTDA}'
-//       );
-//   });
-// });

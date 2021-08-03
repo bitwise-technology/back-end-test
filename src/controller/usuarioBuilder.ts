@@ -6,6 +6,11 @@ import {
   usernameValidationRegex
 } from '../common/utils';
 
+/**
+ * Cria uma instância de usuário após validados os parâmetros
+ *
+ * @returns instância de Usuário com os dados fornecidos
+ */
 export default function buildUsuario(
   username: string,
   name: string,
