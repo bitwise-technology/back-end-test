@@ -2,7 +2,7 @@
   "name": "back-end-test",
   "version": "1.0.0-SNAPSHOT",
   "description": "RESTful API para cadastro de usuarios usando o Github GraphQL API",
-  "main": "app.ts",
+  "main": "index.ts",
   "directories": {
     "test": "test"
   },
@@ -55,5 +55,12 @@
     "prettier": "^1.18.2",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "fs": "^0.0.1-security",
+    "pg": "^8.7.1"
   }
 }
