@@ -1,10 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import fs from 'fs';
 import { Pool } from 'pg';
 
-import keys from './keys';
+import keys from './server/keys';
 
 // Express App Setup
 
@@ -14,14 +13,25 @@ app.use(bodyParser.json());
 
 // Postgres Client Setup
 
-const userCreateTableQuery = fs.readFileSync('../model/usuario-create-table.sql').toString();
+const userCreateTableQuery = `
+DROP TABLE IF EXISTS usuario;
+CREATE TABLE usuario(
+  username varchar not null primary key,
+  name varchar not null,
+  lastName varchar,
+  profileImageUrl varchar,
+  bio varchar,
+  email varchar,
+  gender varchar
+);
+`;
 
 const pgClient = new Pool({
   user: keys.pgUser,
   host: keys.pgHost,
   database: keys.pgDatabase,
   password: keys.pgPassword,
-  port: keys.pgPort
+  port: parseInt(keys.pgPort!)
 });
 pgClient.on('error', () => console.log('Lost PG connection'));
 
@@ -42,6 +52,6 @@ app.get('/user/all', async (req, res) => {
   res.send(values.rows);
 });
 
-app.listen(5000, err => {
-  console.log('Server started');
+app.listen(5000, () => {
+  console.log('Server started, listening at port 5000...');
 });

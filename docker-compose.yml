@@ -1,0 +1,26 @@
+version: '3'
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      POSTGRES_USER: backend-user
+      POSTGRES_PASSWORD: senha@123
+      POSTGRES_DB: backend-test
+    ports:
+      - '5434:5432'
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    ports:
+      - '5000:5000'
+    volumes:
+      - /app/node_modules
+      - ./src:/app/src
+      - ./test:/app/test
+    environment:
+      PG_USER: backend-user
+      PG_PASSWORD: senha@123
+      PG_HOST: postgres
+      PG_PORT: 5432
+      PG_DATABASE: backend-test
