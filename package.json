@@ -7,7 +7,12 @@
     "test": "test"
   },
   "scripts": {
-    "test": "test"
+    "build": "npx typecheck && babel src -d out --extensions '.js,.jsx,.ts,.tsx'",
+    "start": "ts-node src/index",
+    "lint": "eslint src --ext js,jsx,ts,tsx && eslint test --ext js,ts",
+    "format": "prettier --write src/**/*.{js,jsx,ts,tsx}",
+    "typecheck": "tsc",
+    "test": "mocha -r ts-node/register 'test/**/*.{js,ts}'"
   },
   "repository": {
     "type": "git",
@@ -23,5 +28,32 @@
   "bugs": {
     "url": "https://github.com/josecarlosns/back-end-test/issues"
   },
-  "homepage": "https://github.com/josecarlosns/back-end-test#readme"
+  "homepage": "https://github.com/josecarlosns/back-end-test#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.5.0",
+    "@babel/core": "^7.5.0",
+    "@babel/plugin-proposal-class-properties": "^7.5.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.4",
+    "@babel/preset-env": "^7.5.2",
+    "@babel/preset-typescript": "^7.3.3",
+    "@babel/register": "^7.4.4",
+    "@babel/runtime": "^7.5.4",
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.7",
+    "@typescript-eslint/eslint-plugin": "^1.11.0",
+    "@typescript-eslint/parser": "^1.11.0",
+    "babel-eslint": "^10.0.2",
+    "babel-preset-airbnb": "^4.0.1",
+    "chai": "^4.2.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-mocha": "^5.3.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "mocha": "^6.1.4",
+    "prettier": "^1.18.2",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
+  }
 }
