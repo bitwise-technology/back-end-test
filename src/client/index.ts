@@ -38,7 +38,7 @@ const queryUser = gql`
  * @param email username do usuário
  * @returns usuário encontrado, ou null caso não exista usuário com este username
  */
-async function getUser(username: string): Promise<GithubUser | null> {
+async function getGithubUser(username: string): Promise<GithubUser | null> {
   try {
     const data = await client.request(queryUser, {
       login: username
@@ -50,4 +50,4 @@ async function getUser(username: string): Promise<GithubUser | null> {
   }
 }
 
-export { getUser };
+export { getGithubUser };

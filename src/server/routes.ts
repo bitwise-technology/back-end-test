@@ -6,16 +6,22 @@ import {
   emailExists,
   getClient,
   getUsuario,
+  getUsuarioPorEmail,
   getUsuarios,
   insertUsuario,
   updateUsuario,
   userExists
 } from './database';
-import { generateUsernames, isNumeric, usernameValidationRegex } from '../common/utils';
+import {
+  emailValidationRegex,
+  generateUsernames,
+  isNumeric,
+  usernameValidationRegex
+} from '../common/utils';
 import ApiUser from '../model/ApiUser';
 import { buildUsuario } from '../controller/usuarioBuilder';
 import ApiError from '../model/ApiError';
-import { getUser } from '../client';
+import { getGithubUser } from '../client';
 
 // Setup do app express
 
@@ -30,27 +36,59 @@ app.get('/', (req, res) => {
   res.send('Hello world! Servidor em funcionamento!');
 });
 
-// Listar todos os usuários, com paginação
+// Listar todos os usuários, com paginação, ou usuário por email, caso a query 'email=?' esteja presente
 app.get('/user', async (req, res) => {
   try {
-    const { limit, start } = req.query;
+    const { email } = req.query;
+    
 
-    let parseLimit, parseStart;
+    // se o queryparam 'email' for nulo, lista tdos os usuários
+    if (!email) {
+      const { limit, start } = req.query;
 
-    if (limit != null)
-      if (!isNumeric(limit)) return res.status(400).send('limit must be a numbers');
-      else parseLimit = parseInt(limit as string);
+      let parseLimit, parseStart;
 
-    if (start != null) {
-      if (!isNumeric(start)) return res.status(400).send('start must be a number');
-      else parseStart = parseInt(start as string);
+      if (limit != null)
+        if (!isNumeric(limit)) return res.status(400).send('limit must be a numbers');
+        else parseLimit = parseInt(limit as string);
+
+      if (start != null) {
+        if (!isNumeric(start)) return res.status(400).send('start must be a number');
+        else parseStart = parseInt(start as string);
+      }
+
+      const values = await getUsuarios(parseLimit, parseStart);
+
+      res.send({
+        result: values.rows
+      });
+      // Se o queryParam email não for nulo, pesquisa usuário por email
+    } else {
+      if (typeof email != 'string' || !email.match(emailValidationRegex))
+        return res.status(400).send('invalid username');
+
+      const queryResults = await getUsuarioPorEmail(email);      
+
+      if (queryResults == null || queryResults.rowCount == 0) return res.status(204).send();
+      else {
+        let data = queryResults!.rows[0];
+
+        const githubUser = await getGithubUser(data.username);
+
+        if (githubUser != null) {
+          data = {
+            followers: githubUser.followers.totalCount,
+            following: githubUser.following.totalCount,
+            repositories: githubUser.repositories.totalCount,
+            profileUrl: githubUser.url,
+            ...queryResults!.rows[0]
+          };
+        }
+        return res.send({
+          data
+        });
+      }
     }
-
-    const values = await getUsuarios(parseLimit, parseStart);
-
-    res.send({
-      result: values.rows
-    });
   } catch (e) {
     res.status(500).send({
       message: e.message
@@ -68,14 +106,14 @@ app.get('/user/:username', async (req, res) => {
 
   if (values == null) res.status(204).send();
   else {
-    let result;
+    let data;
 
-    const githubUser = await getUser(username);
+    const githubUser = await getGithubUser(username);
 
     if (githubUser == null) {
-      result = { ...values.rows[0] };
+      data = values.rows[0];
     } else {
-      result = {
+      data = {
         followers: githubUser.followers.totalCount,
         following: githubUser.following.totalCount,
         repositories: githubUser.repositories.totalCount,
@@ -85,7 +123,7 @@ app.get('/user/:username', async (req, res) => {
     }
 
     res.send({
-      result
+      data
     });
   }
 });
@@ -99,7 +137,7 @@ app.post('/user/', async (req, res) => {
 
     const { github } = req.query;
     if (github) {
-      const githubUser = await getUser(username);
+      const githubUser = await getGithubUser(username);
       if (githubUser == null) {
         return res.status(404).send({
           message: 'github user not found',

@@ -92,6 +92,18 @@ async function getUsuario(username: string) {
 }
 
 /**
+ * Busca por um usuário pelo email
+ * @param email email do usuário procurado
+ * @returns dados do usuário em questão, ou null caso não encontrado
+ */
+async function getUsuarioPorEmail(email: string) {
+  const value = await getClient().query('select * from usuario where usuario.email=$1', [email]);
+
+  if (value.rowCount == 0) return null;
+  else return value;
+}
+
+/**
  * Insere um novo usuário no banco de dados
  *
  * @param usuario usuário a ser inserido
@@ -196,7 +208,7 @@ async function deleteUsuario(username: string) {
     [username]
   );
 
-  return result
+  return result;
 }
 
 export {
@@ -204,6 +216,7 @@ export {
   getClient,
   getUsuarios,
   getUsuario,
+  getUsuarioPorEmail,
   insertUsuario,
   updateUsuario,
   deleteUsuario,
