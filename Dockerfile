@@ -6,4 +6,4 @@ COPY "./src" "./src"
 COPY "./test" "./test"
 COPY "./.babelrc" "./"
 COPY "./tsconfig.json" "./"
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "nodemon"]

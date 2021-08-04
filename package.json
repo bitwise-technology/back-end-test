@@ -12,7 +12,8 @@
     "lint": "eslint src --ext js,jsx,ts,tsx && eslint test --ext js,ts",
     "format": "prettier --write src/**/*.{js,jsx,ts,tsx}",
     "typecheck": "tsc",
-    "test": "mocha -r ts-node/register 'test/**/*.{js,ts}'"
+    "test": "mocha -r ts-node/register 'test/**/*.{js,ts}'",
+    "nodemon": "nodemon --watch 'src/**' --ext 'ts,json' --ignore 'test/**/*.spec.ts' --exec 'ts-node src/index.ts'"
   },
   "repository": {
     "type": "git",
@@ -66,6 +67,7 @@
     "express": "^4.17.1",
     "graphql": "^15.5.1",
     "graphql-request": "^3.5.0",
+    "nodemon": "^2.0.12",
     "pg": "^8.7.1"
   }
 }

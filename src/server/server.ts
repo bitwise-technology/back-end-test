@@ -1,7 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { getClient } from './database';
+import { getClient, getUsuario, getUsuarios } from './database';
+import { isNumeric, usernameValidationRegex } from '../common/utils';
 
 // Setup do app express
 
@@ -15,10 +16,37 @@ app.get('/', (req, res) => {
   res.send('Hello world! Servidor em funcionamento!');
 });
 
-app.get('/user/all', async (req, res) => {
-  const values = await getClient().query('SELECT * from user');
+app.get('/user', async (req, res) => {
+  try {
+    const { limit, start } = req.query;
 
-  res.send(values.rows);
+    let parseLimit, parseStart;
+
+    if (limit != null)
+      if (!isNumeric(limit)) return res.status(400).send('limit must be a numbers');
+      else parseLimit = parseInt(limit as string);
+
+    if (start != null) {
+      if (!isNumeric(start)) return res.status(400).send('start must be a number');
+      else parseStart = parseInt(start as string);
+    }
+
+    const values = await getUsuarios(parseLimit, parseStart);
+
+    res.send(values.rows);
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
+});
+
+app.get('/user/:username', async (req, res) => {
+  const { username } = req.params;
+
+  if (!username.match(usernameValidationRegex)) return res.status(400).send('invalid username');
+
+  const values = await getUsuario(username);
+
+  if (values == null) res.send();
 });
 
 function startServer() {
