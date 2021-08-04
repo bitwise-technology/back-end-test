@@ -13,7 +13,7 @@ services:
       dockerfile: Dockerfile
       context: ./
     ports:
-      - '5000:5000'
+      - '5000:5000' # altere aqui a porta que deseja que a API use
     volumes:
       - /app/node_modules
       - ./src:/app/src

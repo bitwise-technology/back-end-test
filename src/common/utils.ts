@@ -18,11 +18,27 @@ function isNumeric(str: any) {
   }
 }
 
+/**
+ * Gera um username aleatório com base em um existente
+ * adicionando um número
+ * 
+ * FIXME encontrar uma forma de verificar se os usernames já existem no github
+ *
+ * @param baseName o username base
+ * @returns um novo username aleatório
+ */
+function generateUsernames(baseName: string, arraySize: number = 5) {
+  return new Array(5)
+    .fill(1, 0, arraySize)
+    .map(_ => `${baseName}${(Math.random() * 999).toFixed(0)}`);
+}
+
 export {
   nameValidationRegex,
   usernameValidationRegex,
   genderValidationRegex,
   emailValidationRegex,
   bioValidationRegex,
-  isNumeric
+  isNumeric,
+  generateUsernames
 };

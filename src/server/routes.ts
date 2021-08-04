@@ -11,7 +11,7 @@ import {
   updateUsuario,
   userExists
 } from './database';
-import { isNumeric, usernameValidationRegex } from '../common/utils';
+import { generateUsernames, isNumeric, usernameValidationRegex } from '../common/utils';
 import ApiUser from '../model/ApiUser';
 import { buildUsuario } from '../controller/usuarioBuilder';
 import ApiError from '../model/ApiError';
@@ -83,11 +83,12 @@ app.post('/user/', async (req, res) => {
     const { github } = req.query;
     if (github) {
       const githubUser = await getUser(username);
-      if (githubUser == null)
+      if (githubUser == null) {
         return res.status(404).send({
-          message: 'github user not found'
+          message: 'github user not found',
+          suggestedNames: generateUsernames(username)
         });
-      else novoUsuario = ApiUser.fromGithub(githubUser);
+      } else novoUsuario = ApiUser.fromGithub(githubUser);
     } else {
       novoUsuario = buildUsuario(username, name, lastName, profileImageUrl, email, bio, gender);
     }
