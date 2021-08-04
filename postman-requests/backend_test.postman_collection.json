@@ -163,6 +163,30 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "getUserByEmail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/user?email=josesilva@gmail.com",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"user"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "josesilva@gmail.com"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {
