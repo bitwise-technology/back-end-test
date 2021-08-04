@@ -12,10 +12,12 @@ app.use(bodyParser.json());
 
 // Rotas
 
+// Raiz
 app.get('/', (req, res) => {
   res.send('Hello world! Servidor em funcionamento!');
 });
 
+// Listar todos os usuários, com paginação
 app.get('/user', async (req, res) => {
   try {
     const { limit, start } = req.query;
@@ -41,6 +43,7 @@ app.get('/user', async (req, res) => {
   }
 });
 
+// Listar usuário por username
 app.get('/user/:username', async (req, res) => {
   const { username } = req.params;
 

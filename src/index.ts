@@ -1,5 +1,5 @@
 import { startDatabase } from './server/database';
-import startServer from './server/server';
+import startServer from './server/routes';
 
 startDatabase();
 startServer();

@@ -11,7 +11,7 @@ const client = new GraphQLClient(githubApi.uri, {
 });
 
 // Query de consulta das informações de usuário
-const query = gql`
+const queryUser = gql`
   query getUser($login: String!) {
     user(login: $login) {
       avatarUrl
@@ -24,15 +24,15 @@ const query = gql`
 `;
 
 // função assíncrona de acesso à API do github
-async function getUser(username: string): Promise<GithubUser> {
+async function getUser(username: string) {
   try {
-    const data = await client.request<GithubUser>(query, {
+    const data = await client.request<GithubUser>(queryUser, {
       login: username
     });
 
     return data;
   } catch (e) {
-    throw new Error('user not found');
+    return null;
   }
 }
 
