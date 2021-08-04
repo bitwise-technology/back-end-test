@@ -1,7 +1,15 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { emailExists, getClient, getUsuario, getUsuarios, insertUsuario, userExists } from './database';
+import {
+  emailExists,
+  getClient,
+  getUsuario,
+  getUsuarios,
+  insertUsuario,
+  updateUsuario,
+  userExists
+} from './database';
 import { isNumeric, usernameValidationRegex } from '../common/utils';
 import ApiUser from '../model/ApiUser';
 import { buildUsuario } from '../controller/usuarioBuilder';
@@ -43,7 +51,9 @@ app.get('/user', async (req, res) => {
       result: values.rows
     });
   } catch (e) {
-    res.status(500).send(e.message);
+    res.status(500).send({
+      message: e.message
+    });
   }
 });
 
@@ -86,9 +96,53 @@ app.post('/user/', async (req, res) => {
       : res.status(204).send();
   } catch (e) {
     if (e instanceof ApiError) {
-      return res.status(e.status).send(e.message);
+      return res.status(e.status).send({
+        message: e.message
+      });
     } else {
-      return res.status(500).send((e as Error).message);
+      return res.status(500).send({
+        message: e.message
+      });
+    }
+  }
+});
+
+// Atualizar usuário
+app.put('/user/:username', async (req, res) => {
+  try {
+    const oldUsername = req.params.username;
+
+    const { username, name, lastName, profileImageUrl, email, bio, gender } = req.body.user;
+
+    let exists = await userExists(oldUsername);
+    if (exists == 0) throw new ApiError(400, 'user not found');
+
+    if (username != oldUsername) {
+      exists = await userExists(username);
+      if (exists > 0) throw new ApiError(400, 'username already in use');
+    }
+
+    exists = await emailExists(email, oldUsername);
+    if (exists > 0) throw new ApiError(400, 'email already in use');
+
+    const novoUsuario = buildUsuario(username, name, lastName, profileImageUrl, email, bio, gender);
+
+    const result = await updateUsuario(oldUsername, novoUsuario);
+
+    return result.rowCount > 0
+      ? res.status(200).send({
+          user: novoUsuario
+        })
+      : res.status(204).send();
+  } catch (e) {
+    if (e instanceof ApiError) {
+      return res.status(e.status).send({
+        message: e.message
+      });
+    } else {
+      return res.status(500).send({
+        message: e.message
+      });
     }
   }
 });

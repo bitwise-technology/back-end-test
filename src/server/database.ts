@@ -10,7 +10,8 @@ import testUserList from '../common/test-users.json';
 const userCreateTableQuery = `
 DROP TABLE IF EXISTS usuario;
 CREATE TABLE usuario(
-  username varchar not null primary key,
+  id serial primary key,
+  username varchar not null unique,
   name varchar not null,
   lastName varchar,
   profileImageUrl varchar,
@@ -119,6 +120,40 @@ async function insertUsuario(usuario: ApiUser) {
 }
 
 /**
+ * Atualiza informações de um usuário no banco de dados
+ *
+ * @param username username atual do usuário
+ * @param usuario novos dados
+ */
+async function updateUsuario(username: string, usuario: ApiUser) {
+  const result = await getClient().query(
+    `
+  update usuario set 
+  username=$1, 
+  name=$2, 
+  lastName=$3, 
+  profileImageUrl=$4, 
+  bio=$5, 
+  email=$6, 
+  gender=$7
+  where username=$8
+  `,
+    [
+      usuario.userName,
+      usuario.name,
+      usuario.lastName,
+      usuario.profileImageUrl,
+      usuario.bio,
+      usuario.email,
+      usuario.gender,
+      username
+    ]
+  );
+
+  return result;
+}
+
+/**
  * Verifica a existência de um usuário dado seu username
  * @param username username do usuário
  * @returns true caso um usuário com o dado username já exista
@@ -126,12 +161,12 @@ async function insertUsuario(usuario: ApiUser) {
 async function userExists(username: string) {
   const result = await getClient().query(
     `
-    select u.username from usuario u where u.username like $1
+    select u.username from usuario u where u.username = $1
   `,
     [username]
   );
 
-  return result.rowCount > 0;
+  return result.rowCount;
 }
 
 /**
@@ -139,15 +174,16 @@ async function userExists(username: string) {
  * @param email email do usuário
  * @returns true caso um usuário com o dado email já exista
  */
-async function emailExists(email: string) {
+async function emailExists(email: string, ignoreUser?: string) {
   const result = await getClient().query(
     `
-    select u.email from usuario u where u.email like $1
+    select u.email from usuario u where u.email = $1 
+    ${ignoreUser ? ` and u.username!=$2` : ''}
   `,
-    [email]
+    ignoreUser ? [email, ignoreUser] : [email]
   );
 
-  return result.rowCount > 0;
+  return result.rowCount;
 }
 
 export {
@@ -156,6 +192,7 @@ export {
   getUsuarios,
   getUsuario,
   insertUsuario,
+  updateUsuario,
   userExists,
   emailExists
 };
