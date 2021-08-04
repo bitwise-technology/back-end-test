@@ -186,6 +186,22 @@ async function emailExists(email: string, ignoreUser?: string) {
   return result.rowCount;
 }
 
+/**
+ * Deleta um usuário do banco
+ * @param username username do usuário a ser deletado
+ * @returns dados do usuário deletado, ou vazio caso nenhuma mudança seja feita
+ */
+async function deleteUsuario(username: string) {
+  const result = await getClient().query(
+    `
+    delete from usuario where username=$1
+  `,
+    [username]
+  );
+
+  return result
+}
+
 export {
   startDatabase,
   getClient,
@@ -193,6 +209,7 @@ export {
   getUsuario,
   insertUsuario,
   updateUsuario,
+  deleteUsuario,
   userExists,
   emailExists
 };

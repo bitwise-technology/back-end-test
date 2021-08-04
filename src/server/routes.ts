@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import {
+  deleteUsuario,
   emailExists,
   getClient,
   getUsuario,
@@ -110,9 +111,14 @@ app.post('/user/', async (req, res) => {
 // Atualizar usuário
 app.put('/user/:username', async (req, res) => {
   try {
+    const { username, name, lastName, profileImageUrl, email, bio, gender } = req.body.user;
+
     const oldUsername = req.params.username;
 
-    const { username, name, lastName, profileImageUrl, email, bio, gender } = req.body.user;
+    const novoUsuario = buildUsuario(username, name, lastName, profileImageUrl, email, bio, gender);
+
+    if (!oldUsername.match(usernameValidationRegex))
+      return res.status(400).send('invalid username');
 
     let exists = await userExists(oldUsername);
     if (exists == 0) throw new ApiError(400, 'user not found');
@@ -125,8 +131,6 @@ app.put('/user/:username', async (req, res) => {
     exists = await emailExists(email, oldUsername);
     if (exists > 0) throw new ApiError(400, 'email already in use');
 
-    const novoUsuario = buildUsuario(username, name, lastName, profileImageUrl, email, bio, gender);
-
     const result = await updateUsuario(oldUsername, novoUsuario);
 
     return result.rowCount > 0
@@ -134,6 +138,27 @@ app.put('/user/:username', async (req, res) => {
           user: novoUsuario
         })
       : res.status(204).send();
+  } catch (e) {
+    if (e instanceof ApiError) {
+      return res.status(e.status).send({
+        message: e.message
+      });
+    } else {
+      return res.status(500).send({
+        message: e.message
+      });
+    }
+  }
+});
+
+app.delete('/user/:username', async (req, res) => {
+  try {
+    const username = req.params.username;
+    if (!username.match(usernameValidationRegex)) return res.status(400).send('invalid username');
+
+    const result = await deleteUsuario(username);
+    if (result.rowCount > 0) return res.send(result.rows[0]);
+    else return res.status(204).send();
   } catch (e) {
     if (e instanceof ApiError) {
       return res.status(e.status).send({
