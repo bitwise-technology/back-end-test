@@ -47,7 +47,6 @@ function startDatabase() {
   getClient()
     .query(userCreateTableQuery)
     .then(_ => {
-      console.log('Create table successfull');
       testUserList.users.forEach(user => {
         insertUsuario(
           new ApiUser(
@@ -60,7 +59,6 @@ function startDatabase() {
             user.gender as Gender
           )
         );
-        console.log(`usuario ${user.username} inserido com sucesso`);
       });
     })
     .catch(err => console.log('Create table failed', err));
