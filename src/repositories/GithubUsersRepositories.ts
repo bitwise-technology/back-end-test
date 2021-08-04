@@ -3,6 +3,6 @@ import { EntityRepository, Repository } from 'typeorm';
 import User from '../entities/User';
 
 @EntityRepository(User)
-class UsersRepositories extends Repository<User> {}
+class GithubUsersRepositories extends Repository<User> {}
 
-export default UsersRepositories;
+export default GithubUsersRepositories;
