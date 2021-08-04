@@ -24,7 +24,6 @@ function checkUserData(
       400,
       'username must be alphanumeric only and contain between 3 and 30 characters'
     );
-  console.log(name);
   if (name != null && !name.match(nameValidationRegex))
     throw new ApiError(400, 'name must be letters only and contain between 3 and 30 characters');
 
