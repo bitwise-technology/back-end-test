@@ -10,5 +10,5 @@ export default interface GithubUser {
 
   name: string;
 
-  userName: string;
+  login: string;
 }

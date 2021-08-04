@@ -46,7 +46,7 @@ export default class ApiUser {
     const splitName = user.name.split(' ');
 
     return buildUsuario(
-      user.userName,
+      user.login,
       splitName[0],
       splitName[splitName.length - 1],
       user.avatarUrl,

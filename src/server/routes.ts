@@ -76,7 +76,21 @@ app.get('/user/:username', async (req, res) => {
 // Inserir usuário
 app.post('/user/', async (req, res) => {
   try {
-    const { username, name, lastName, profileImageUrl, email, bio, gender } = req.body.user;
+    let { username, name, lastName, profileImageUrl, email, bio, gender } = req.body.user;
+
+    let novoUsuario: ApiUser;
+
+    const { github } = req.query;
+    if (github) {
+      const githubUser = await getUser(username);
+      if (githubUser == null)
+        return res.status(404).send({
+          message: 'github user not found'
+        });
+      else novoUsuario = ApiUser.fromGithub(githubUser);
+    } else {
+      novoUsuario = buildUsuario(username, name, lastName, profileImageUrl, email, bio, gender);
+    }
 
     let exists = await userExists(username);
 
@@ -85,8 +99,6 @@ app.post('/user/', async (req, res) => {
     exists = await emailExists(email);
 
     if (exists) throw new ApiError(400, 'email already being used');
-
-    const novoUsuario = buildUsuario(username, name, lastName, profileImageUrl, email, bio, gender);
 
     const result = await insertUsuario(novoUsuario);
 

@@ -58,7 +58,7 @@ function buildUsuario(
   bio: string | null,
   gender: string | null
 ): ApiUser {
-  checkUserData(username, name, lastName, email, bio, gender);
+  // checkUserData(username, name, lastName, email, bio, gender);
   return new ApiUser(username, name, lastName, profileImageUrl, email, bio, gender as Gender);
 }
 
