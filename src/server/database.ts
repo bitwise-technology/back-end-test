@@ -54,6 +54,7 @@ function startDatabase() {
             user.username,
             user.name,
             user.lastName,
+            user.profileImageUrl,
             user.email,
             user.bio,
             user.gender as Gender

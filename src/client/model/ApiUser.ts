@@ -27,6 +27,7 @@ export default class ApiUser {
     username: string,
     name: string,
     lastName: string | undefined,
+    profileImageUrl: string | undefined,
     email: string,
     bio: string | undefined,
     gender: Gender
@@ -34,6 +35,7 @@ export default class ApiUser {
     this.userName = username;
     this.name = name;
     this.lastName = lastName;
+    this.profileImageUrl = profileImageUrl;
     this.email = email;
     this.bio = bio;
     this.gender = gender;
@@ -46,6 +48,7 @@ export default class ApiUser {
       user.userName,
       splitName[0],
       splitName[splitName.length - 1],
+      user.avatarUrl,
       user.email,
       user.bio,
       undefined
