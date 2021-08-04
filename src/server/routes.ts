@@ -67,10 +67,27 @@ app.get('/user/:username', async (req, res) => {
   const values = await getUsuario(username);
 
   if (values == null) res.status(204).send();
-  else
+  else {
+    let result;
+
+    const githubUser = await getUser(username);
+
+    if (githubUser == null) {
+      result = { ...values.rows[0] };
+    } else {
+      result = {
+        followers: githubUser.followers.totalCount,
+        following: githubUser.following.totalCount,
+        repositories: githubUser.repositories.totalCount,
+        profileUrl: githubUser.url,
+        ...values.rows[0]
+      };
+    }
+
     res.send({
-      result: values.rows[0]
+      result
     });
+  }
 });
 
 // Inserir usuário

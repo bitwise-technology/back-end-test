@@ -14,11 +14,21 @@ const client = new GraphQLClient(githubApi.uri, {
 const queryUser = gql`
   query getUser($login: String!) {
     user(login: $login) {
+      url
       avatarUrl
-      bio
       email
+      bio
       name
       login
+      followers {
+        totalCount
+      }
+      following {
+        totalCount
+      }
+      repositories {
+        totalCount
+      }
     }
   }
 `;
@@ -26,11 +36,21 @@ const queryUser = gql`
 const queryUserEmail = gql`
   query getUser($email: String!) {
     user(email: $email) {
+      url
       avatarUrl
-      bio
       email
+      bio
       name
       login
+      followers {
+        totalCount
+      }
+      following {
+        totalCount
+      }
+      repositories {
+        totalCount
+      }
     }
   }
 `;
