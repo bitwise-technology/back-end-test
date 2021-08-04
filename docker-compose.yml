@@ -24,3 +24,4 @@ services:
       PG_HOST: postgres
       PG_PORT: 5432
       PG_DATABASE: backend-test
+      GITHUB_TOKEN: ${GITHUB_TOKEN}

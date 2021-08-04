@@ -24,6 +24,9 @@
     "no-console": "off",
     "prettier/prettier": "error",
     "@typescript-eslint/explicit-member-accessibility": "off",
+    "@typescript-eslint/explicit-function-return-type": {
+      "allowExpressions": true
+    },
     "mocha/no-identical-title": "error"
   },
   "settings": {

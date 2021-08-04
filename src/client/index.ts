@@ -6,7 +6,7 @@ import GithubUser from './model/GithubUser';
 // cliente usado para fazer requisições HTTP
 const client = new GraphQLClient(githubApi.uri, {
   headers: {
-    Authorization: `bearer ${githubApi.token}`
+    Authorization: `bearer ${process.env.GITHUB_TOKEN}`
   }
 });
 
