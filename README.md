@@ -6,7 +6,7 @@ Implementação do [desafio](DESAFIO.md) da Bitwise Tecnology para implementaç�
 
 1. Tenha o ecossistema do [Docker](https://docs.docker.com/engine/install/) instalado.
 2. Instale o [docker-compose](https://docs.docker.com/compose/install/).
-3. Faça o download dos repositório.
+3. Faça o download do repositório.
 4. Crie um arquivo `.env` na raiz do repositório, contendo o [oauth token](https://docs.github.com/pt/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) do github que o client irá usar para se comunicar com a [API GraphQL do Github](https://docs.github.com/pt/graphql/overview/about-the-graphql-api), de acordo com o formato abaixo. Sem um token válido, o sistema não poderá se comunicar com a API do Github.
 
    `.env`
