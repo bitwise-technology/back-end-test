@@ -1,23 +1,24 @@
-import GithubUser from './GithubUser';
+import GithubUser from '../client/model/GithubUser';
+import { buildUsuario } from '../controller/usuarioBuilder';
 
 /**
  * Tipo de dado de gênero
  */
-export type Gender = 'm' | 'f' | undefined;
+export type Gender = 'm' | 'f' | null | undefined;
 
 /**
  * classe da entidade Usuário usado pela API
  */
 export default class ApiUser {
-  profileImageUrl: string | undefined;
+  profileImageUrl: string | null | undefined;
 
-  bio: string | undefined;
+  bio: string | null | undefined;
 
   email: string;
 
   name: string;
 
-  lastName: string | undefined;
+  lastName: string | null | undefined;
 
   userName: string;
 
@@ -26,10 +27,10 @@ export default class ApiUser {
   constructor(
     username: string,
     name: string,
-    lastName: string | undefined,
-    profileImageUrl: string | undefined,
+    lastName: string | null | undefined,
+    profileImageUrl: string | null | undefined,
     email: string,
-    bio: string | undefined,
+    bio: string | null | undefined,
     gender: Gender
   ) {
     this.userName = username;
@@ -44,14 +45,14 @@ export default class ApiUser {
   static fromGithub(user: GithubUser): ApiUser {
     const splitName = user.name.split(' ');
 
-    return new ApiUser(
+    return buildUsuario(
       user.userName,
       splitName[0],
       splitName[splitName.length - 1],
       user.avatarUrl,
       user.email,
       user.bio,
-      undefined
+      null
     );
   }
 }

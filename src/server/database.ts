@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import ApiUser, { Gender } from '../client/model/ApiUser';
+import ApiUser, { Gender } from '../model/ApiUser';
 
 import keys from './keys';
 import testUserList from '../common/test-users.json';

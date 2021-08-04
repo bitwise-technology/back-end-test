@@ -22,8 +22,24 @@ const queryUser = gql`
     }
   }
 `;
+// Query de consulta das informações de usuário por email
+const queryUserEmail = gql`
+  query getUser($email: String!) {
+    user(email: $email) {
+      avatarUrl
+      bio
+      email
+      name
+      login
+    }
+  }
+`;
 
-// função assíncrona de acesso à API do github
+/**
+ * Busca de usuário por username
+ * @param email username do usuário
+ * @returns usuário encontrado, ou null caso não exista usuário com este username
+ */
 async function getUser(username: string) {
   try {
     const data = await client.request<GithubUser>(queryUser, {
@@ -36,4 +52,21 @@ async function getUser(username: string) {
   }
 }
 
-export default getUser;
+/**
+ * Busca de usuário por email
+ * @param email Email do usuário
+ * @returns usuário encontrado, ou null caso não exista usuário com este email
+ */
+async function getUserByEmail(email: string) {
+  try {
+    const data = await client.request<GithubUser>(queryUserEmail, {
+      email: email
+    });
+
+    return data;
+  } catch (e) {
+    return null;
+  }
+}
+
+export { getUser, getUserByEmail };

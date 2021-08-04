@@ -1,8 +1,12 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { getClient, getUsuario, getUsuarios } from './database';
+import { emailExists, getClient, getUsuario, getUsuarios, insertUsuario, userExists } from './database';
 import { isNumeric, usernameValidationRegex } from '../common/utils';
+import ApiUser from '../model/ApiUser';
+import { buildUsuario } from '../controller/usuarioBuilder';
+import ApiError from '../model/ApiError';
+import { getUser } from '../client';
 
 // Setup do app express
 
@@ -56,6 +60,37 @@ app.get('/user/:username', async (req, res) => {
     res.send({
       result: values.rows[0]
     });
+});
+
+// Inserir usuário
+app.post('/user/', async (req, res) => {
+  try {
+    const { username, name, lastName, profileImageUrl, email, bio, gender } = req.body.user;
+
+    let exists = await userExists(username);
+
+    if (exists) throw new ApiError(400, 'username already being used');
+
+    exists = await emailExists(email);
+
+    if (exists) throw new ApiError(400, 'email already being used');
+
+    const novoUsuario = buildUsuario(username, name, lastName, profileImageUrl, email, bio, gender);
+
+    const result = await insertUsuario(novoUsuario);
+
+    return result.rowCount > 0
+      ? res.status(200).send({
+          user: novoUsuario
+        })
+      : res.status(204).send();
+  } catch (e) {
+    if (e instanceof ApiError) {
+      return res.status(e.status).send(e.message);
+    } else {
+      return res.status(500).send((e as Error).message);
+    }
+  }
 });
 
 function startServer() {
