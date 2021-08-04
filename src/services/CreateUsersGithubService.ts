@@ -38,13 +38,17 @@ class CreateUsersGithubService {
 
     const graphQLClient = new GraphQLClient(endpoint, {
       headers: {
-        authorization: 'Bearer TOKEN',
+        authorization: 'Bearer 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',
       },
     });
 
     const data = await graphQLClient.request(query);
 
-    console.log(data);
+    if (data.user.email === '') {
+      throw new Error('User does not have an email');
+    } else if (data.user.name === '') {
+      throw new Error('User does not have a name');
+    }
 
     const [name, lastName] = data.user.name.split(' ');
 
