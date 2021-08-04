@@ -1,5 +1,5 @@
 import { getCustomRepository } from 'typeorm';
-import { buildSchema, graphql } from 'graphql';
+import { GraphQLClient, gql } from 'graphql-request';
 
 import GithubUsersRepositories from '../repositories/GithubUsersRepositories';
 import User from '../entities/User';
@@ -9,7 +9,7 @@ interface IGithubUserRequest {
 }
 
 class CreateUsersGithubService {
-  async execute({ username }: IGithubUserRequest): Promise<any> {
+  async execute({ username }: IGithubUserRequest): Promise<User> {
     const githubUsersRepository = getCustomRepository(GithubUsersRepositories);
 
     if (!username) {
@@ -23,20 +23,44 @@ class CreateUsersGithubService {
       throw new Error('User already exists');
     }
 
-    const schema = buildSchema(`query {
+    const query = gql`
+    {
       user(login: "${username}") {
-        id
         login
         name
         avatarUrl
         bio
         email
       }
-    }`);
+    }`;
 
-    const result = await graphql(schema, '{ username }');
+    const endpoint = 'https://api.github.com/graphql';
 
-    return result;
+    const graphQLClient = new GraphQLClient(endpoint, {
+      headers: {
+        authorization: 'Bearer TOKEN',
+      },
+    });
+
+    const data = await graphQLClient.request(query);
+
+    console.log(data);
+
+    const [name, lastName] = data.user.name.split(' ');
+
+    const user = githubUsersRepository.create({
+      username: data.user.login,
+      name,
+      lastName,
+      profileImageUrl: data.user.avatarUrl,
+      bio: data.user.bio,
+      email: data.user.email,
+      gender: 'Not Specified',
+    });
+
+    await githubUsersRepository.save(user);
+
+    return user;
   }
 }
 
