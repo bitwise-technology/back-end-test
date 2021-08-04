@@ -10,8 +10,7 @@ import testUserList from '../common/test-users.json';
 const userCreateTableQuery = `
 DROP TABLE IF EXISTS usuario;
 CREATE TABLE usuario(
-  id serial primary key,
-  username varchar not null unique,
+  username varchar not null primary key,
   name varchar not null,
   lastName varchar,
   profileImageUrl varchar,

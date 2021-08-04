@@ -184,6 +184,12 @@ app.delete('/user/:username', async (req, res) => {
   }
 });
 
+app.all('*', async (req, res) => {
+  return res.status(404).send({
+    message: 'resource not found'
+  });
+});
+
 function startServer() {
   app.listen(5000, () => {
     console.log('Server started, listening at port 5000...');

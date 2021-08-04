@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "npx typecheck && babel src -d out --extensions '.js,.jsx,.ts,.tsx'",
-    "start": "ts-node src/index",
+    "start": "npm run test && npm run nodemon",
     "lint": "eslint src --ext js,jsx,ts,tsx && eslint test --ext js,ts",
     "format": "prettier --write src/**/*.{js,jsx,ts,tsx}",
     "typecheck": "tsc",
