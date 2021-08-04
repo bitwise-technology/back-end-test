@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import Usuario from '../src/model/Usuario';
-import buildUsuario from '../src/controller/usuarioBuilder';
+import { buildUsuario } from '../src/controller/usuarioBuilder';
+import ApiUser from '../src/model/ApiUser';
 
 describe("Módulo 'Usuário'", (): void => {
   it('Função geradora de usuário fuciona corretamente', (): void => {
@@ -10,12 +10,12 @@ describe("Módulo 'Usuário'", (): void => {
       'Jose',
       'Silva',
       'http://placekitten.com/200/300',
-      'programmer',
       'josesilva@email.com',
+      'programmer',
       'm'
     );
 
-    expect(usuario).to.be.instanceOf(Usuario);
+    expect(usuario).to.be.instanceOf(ApiUser);
   });
 
   it('Função geradora de usuário valida os dados corretamente', (): void => {
@@ -61,7 +61,7 @@ describe("Módulo 'Usuário'", (): void => {
         'Jose',
         'Silva',
         'http://placekitten.com/200/300',
-        'bio com espaço na string lol', // bio inválida
+        'b', // bio inválida
         'josesilva@email.com',
         'm'
       );
