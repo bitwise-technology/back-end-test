@@ -12,19 +12,24 @@ import ApiError from '../model/ApiError';
  * Faz validação dos dados de usuário, lança exceções caso algum dado seja inválido
  */
 function checkUserData(
-  username: string,
-  name: string,
+  username: string | null,
+  name: string | null,
   lastName: string | null,
   email: string | null,
   bio: string | null,
   gender: string | null
 ) {
-  if (username != null && !username.match(usernameValidationRegex))
+  if (username == null) {
+    throw new ApiError(400, 'missing required field: username');
+  } else if (!username.match(usernameValidationRegex))
     throw new ApiError(
       400,
       'username must be alphanumeric only and contain between 3 and 30 characters'
     );
-  if (name != null && !name.match(nameValidationRegex))
+
+  if (name == null) {
+    throw new ApiError(400, 'missing required field: name');
+  } else if (!name.match(nameValidationRegex))
     throw new ApiError(400, 'name must be letters only and contain between 3 and 30 characters');
 
   if (lastName != null && !lastName.match(nameValidationRegex))
@@ -37,8 +42,9 @@ function checkUserData(
   if (bio != null && !bio.match(bioValidationRegex))
     throw new ApiError(400, 'bio must be letters only and contain between 3 and 30 characters');
 
-  if (email != null && !email.match(emailValidationRegex))
-    throw new ApiError(400, 'invalid email address');
+  if (email == null) {
+    throw new ApiError(400, 'missing required field: email');
+  } else if (!email.match(emailValidationRegex)) throw new ApiError(400, 'invalid email address');
 
   if (gender != null && !gender.match(genderValidationRegex))
     throw new ApiError(400, 'gender must be either m, f or undefined');
