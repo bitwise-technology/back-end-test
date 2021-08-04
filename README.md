@@ -1,6 +1,6 @@
 ## Desafio backend - Bitwise Tecnology
 
-Implementação do [desafio](DESAFIO.md) da Bitwise Tecnology para implementação de RESTful API.
+Implementação do [desafio](DESAFIO.md) da Bitwise Tecnology com uso de RESTful API.
 
 ## Como usar
 
@@ -14,7 +14,7 @@ Implementação do [desafio](DESAFIO.md) da Bitwise Tecnology para implementaç�
    GITHUB_TOKEN=yourtokenhere
    ```
 
-    >Obs.: também é possível definir uma variavel de ambiente `GITHUB_TOKEN` no seu `.bashrc`. De qualquer forma, o sistema irá procurar por uma variável de ambiente `GITHUB_TOKEN` ao iniciar o sistema. Sem um token válido, o sistema não poderá se comunicar com a API do Github.
+    >Obs.: também é possível definir uma variavel de ambiente `GITHUB_TOKEN` no seu `.bashrc`. De qualquer forma, o sistema irá procurar por uma variável de ambiente `GITHUB_TOKEN` ao iniciar. Sem um token válido, o sistema não poderá se comunicar com a API do Github.
 
 4. Execute `docker-compose up` na raiz do projeto.
 5. Agora basta aguardar a criação e execução das imagens.
