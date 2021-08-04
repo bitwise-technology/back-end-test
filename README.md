@@ -6,13 +6,15 @@ Implementação do [desafio](DESAFIO.md) da Bitwise Tecnology para implementaç�
 
 1. Tenha o ecossistema do [Docker](https://docs.docker.com/engine/install/) instalado, incluindo o [docker-compose](https://docs.docker.com/compose/install/).
 2. Faça o download do repositório.
-3. Crie um arquivo `.env` na raiz do repositório, contendo o [oauth token](https://docs.github.com/pt/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) do github que o client irá usar para se comunicar com a [API GraphQL do Github](https://docs.github.com/pt/graphql/overview/about-the-graphql-api), de acordo com o formato abaixo. Sem um token válido, o sistema não poderá se comunicar com a API do Github.
+3. Crie um arquivo `.env` na raiz do repositório, contendo o [oauth token](https://docs.github.com/pt/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) do github que o client irá usar para se comunicar com a [API GraphQL do Github](https://docs.github.com/pt/graphql/overview/about-the-graphql-api), de acordo com o formato abaixo.
 
    `.env`
 
    ```env
    GITHUB_TOKEN=yourtokenhere
    ```
+
+    >Obs.: também é possível definir uma variavel de ambiente `GITHUB_TOKEN` no seu `.bashrc`. De qualquer forma, o sistema irá procurar por uma variável de ambiente `GITHUB_TOKEN` ao iniciar o sistema. Sem um token válido, o sistema não poderá se comunicar com a API do Github.
 
 4. Execute `docker-compose up` na raiz do projeto.
 5. Agora basta aguardar a criação e execução das imagens.
