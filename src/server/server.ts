@@ -33,7 +33,9 @@ app.get('/user', async (req, res) => {
 
     const values = await getUsuarios(parseLimit, parseStart);
 
-    res.send(values.rows);
+    res.send({
+      result: values.rows
+    });
   } catch (e) {
     res.status(500).send(e.message);
   }
@@ -46,7 +48,11 @@ app.get('/user/:username', async (req, res) => {
 
   const values = await getUsuario(username);
 
-  if (values == null) res.send();
+  if (values == null) res.status(204).send();
+  else
+    res.send({
+      result: values.rows[0]
+    });
 });
 
 function startServer() {
