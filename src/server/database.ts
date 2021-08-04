@@ -1,7 +1,8 @@
 import { Pool } from 'pg';
-import { isNumeric, usernameValidationRegex } from '../common/utils';
+import ApiUser, { Gender } from '../client/model/ApiUser';
 
 import keys from './keys';
+import testUserList from '../common/test-users.json';
 
 // Setup do cliente postgres
 
@@ -14,7 +15,7 @@ CREATE TABLE usuario(
   lastName varchar,
   profileImageUrl varchar,
   bio varchar,
-  email varchar,
+  email varchar unique,
   gender varchar
 );
 `;
@@ -45,7 +46,22 @@ function getClient() {
 function startDatabase() {
   getClient()
     .query(userCreateTableQuery)
-    .then(_ => console.log('Create table successfull'))
+    .then(_ => {
+      console.log('Create table successfull');
+      testUserList.users.forEach(user => {
+        insertUsuario(
+          new ApiUser(
+            user.username,
+            user.name,
+            user.lastName,
+            user.email,
+            user.bio,
+            user.gender as Gender
+          )
+        );
+        console.log(`usuario ${user.username} inserido com sucesso`);
+      });
+    })
     .catch(err => console.log('Create table failed', err));
 }
 
@@ -68,7 +84,7 @@ async function getUsuarios(limit: number | undefined, start: number | undefined)
  * @returns dados do usuário em questão, ou null caso não encontrado
  */
 async function getUsuario(username: string) {
-  const value = await getClient().query('select * from usuario where usuario.username like $1', [
+  const value = await getClient().query('select * from usuario where usuario.username=$1', [
     username
   ]);
 
@@ -76,4 +92,69 @@ async function getUsuario(username: string) {
   else return value;
 }
 
-export { startDatabase, getClient, getUsuarios, getUsuario };
+/**
+ * Insere um novo usuário no banco de dados
+ *
+ * @param usuario usuário a ser inserido
+ */
+async function insertUsuario(usuario: ApiUser) {
+  const result = await getClient().query(
+    `
+  insert into usuario(username, name, lastName, profileImageUrl, bio, email, gender)
+  values ($1,$2,$3,$4,$5,$6,$7)
+  `,
+    [
+      usuario.userName,
+      usuario.name,
+      usuario.lastName,
+      usuario.profileImageUrl,
+      usuario.bio,
+      usuario.email,
+      usuario.gender
+    ]
+  );
+
+  return result;
+}
+
+/**
+ * Verifica a existência de um usuário dado seu username
+ * @param username username do usuário
+ * @returns true caso um usuário com o dado username já exista
+ */
+async function userExists(username: string) {
+  const result = await getClient().query(
+    `
+    select u.username from usuario u where u.username like $1
+  `,
+    [username]
+  );
+
+  return result.rowCount > 0;
+}
+
+/**
+ * Verifica a existência de um usuário dado seu email
+ * @param email email do usuário
+ * @returns true caso um usuário com o dado email já exista
+ */
+async function emailExists(email: string) {
+  const result = await getClient().query(
+    `
+    select u.email from usuario u where u.email like $1
+  `,
+    [email]
+  );
+
+  return result.rowCount > 0;
+}
+
+export {
+  startDatabase,
+  getClient,
+  getUsuarios,
+  getUsuario,
+  insertUsuario,
+  userExists,
+  emailExists
+};

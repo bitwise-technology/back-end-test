@@ -1,0 +1,27 @@
+{
+  "users": [{
+    "username": "josecarlosns",
+    "name": "Jose",
+    "lastName": "Silva",
+    "profileImageUrl": "https://placekitten.com/200/200",
+    "bio": "Hello",
+    "email": "josesilva@gmail.com",
+    "gender": "m"
+  },{
+    "username": "johndoe",
+    "name": "John",
+    "lastName": "Doe",
+    "profileImageUrl": "https://placekitten.com/300/200",
+    "bio": "Hi",
+    "email": "johndoe@gmail.com",
+    "gender": "m"
+  },{
+    "username": "marysue",
+    "name": "Mary",
+    "lastName": "Sue",
+    "profileImageUrl": "https://placekitten.com/200/300",
+    "bio": "Heyo",
+    "email": "marysue@gmail.com",
+    "gender": "f"
+  }]
+}
