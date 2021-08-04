@@ -1,5 +1,6 @@
 import ApiUser, { Gender } from '../model/ApiUser';
 import {
+  bioValidationRegex,
   emailValidationRegex,
   genderValidationRegex,
   nameValidationRegex,
@@ -23,7 +24,7 @@ function checkUserData(
       400,
       'username must be alphanumeric only and contain between 3 and 30 characters'
     );
-
+  console.log(name);
   if (name != null && !name.match(nameValidationRegex))
     throw new ApiError(400, 'name must be letters only and contain between 3 and 30 characters');
 
@@ -34,7 +35,7 @@ function checkUserData(
     );
 
   // FIXME bio deveria conter também espaços e caracteres especiais, mas como o README do desafio pediu somente letras...
-  if (bio != null && !bio.match(nameValidationRegex))
+  if (bio != null && !bio.match(bioValidationRegex))
     throw new ApiError(400, 'bio must be letters only and contain between 3 and 30 characters');
 
   if (email != null && !email.match(emailValidationRegex))
@@ -58,7 +59,7 @@ function buildUsuario(
   bio: string | null,
   gender: string | null
 ): ApiUser {
-  // checkUserData(username, name, lastName, email, bio, gender);
+  checkUserData(username, name, lastName, email, bio, gender);
   return new ApiUser(username, name, lastName, profileImageUrl, email, bio, gender as Gender);
 }
 
