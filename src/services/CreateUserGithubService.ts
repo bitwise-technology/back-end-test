@@ -8,7 +8,7 @@ interface IGithubUserRequest {
   username: string;
 }
 
-class CreateUsersGithubService {
+class CreateUserGithubService {
   async execute({ username }: IGithubUserRequest): Promise<User> {
     const githubUsersRepository = getCustomRepository(GithubUsersRepositories);
 
@@ -68,4 +68,4 @@ class CreateUsersGithubService {
   }
 }
 
-export default CreateUsersGithubService;
+export default CreateUserGithubService;

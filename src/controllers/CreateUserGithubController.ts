@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import CreateUsersGithubService from '../services/CreateUsersGithubService';
+import CreateUsersGithubService from '../services/CreateUserGithubService';
 
 class CreateUserGithubController {
   async handle(request: Request, response: Response): Promise<Response> {
