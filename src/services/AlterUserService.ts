@@ -1,5 +1,11 @@
 import { getCustomRepository } from 'typeorm';
 
+import {
+  verifyUsername,
+  verifyEmail,
+  verifyUrl,
+  verifyField,
+} from '../utils/regex';
 import User from '../entities/User';
 import UsersRepositories from '../repositories/UsersRepositories';
 
@@ -30,18 +36,41 @@ class AlterUserService {
       let { name, lastName, profileImageUrl, bio, email, gender } = user;
 
       if (newName) {
+        if (!verifyField(newName)) {
+          throw new Error('Invalid name');
+        }
         name = newName;
       }
       if (newLastName) {
+        if (!verifyField(newLastName)) {
+          throw new Error('Invalid last name');
+        }
         lastName = newLastName;
       }
       if (newProfileImageUrl) {
+        if (!verifyUrl(newProfileImageUrl)) {
+          throw new Error('Invalid profile image url');
+        }
         profileImageUrl = newProfileImageUrl;
       }
       if (newBio) {
+        if (!verifyField(newBio)) {
+          throw new Error('Invalid bio');
+        }
         bio = newBio;
       }
       if (newEmail) {
+        const emailAlreadyExists = await usersRepository.findOne({
+          email: newEmail,
+        });
+        if (emailAlreadyExists) {
+          throw new Error('Email already exists');
+        }
+
+        if (!verifyEmail(newEmail)) {
+          throw new Error('Invalid email');
+        }
+
         email = newEmail;
       }
       if (newGender) {
