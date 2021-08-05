@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "ts-node-dev src/server.ts",
-    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
+    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
+    "test": "jest"
   },
   "repository": "https://github.com/buguno/back-end-test.git",
   "author": "buguno <brunnodesouzabezerra@gmail.com>",
