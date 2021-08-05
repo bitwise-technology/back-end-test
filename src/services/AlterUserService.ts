@@ -1,11 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 
-import {
-  verifyUsername,
-  verifyEmail,
-  verifyUrl,
-  verifyField,
-} from '../utils/regex';
+import { verifyEmail, verifyUrl, verifyField } from '../utils/regex';
 import User from '../entities/User';
 import UsersRepositories from '../repositories/UsersRepositories';
 
