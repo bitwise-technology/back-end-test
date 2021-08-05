@@ -1,5 +1,11 @@
 import { getCustomRepository } from 'typeorm';
 
+import {
+  verifyUsername,
+  verifyEmail,
+  verifyUrl,
+  verifyField,
+} from '../utils/regex';
 import UsersRepositories from '../repositories/UsersRepositories';
 import User from '../entities/User';
 
@@ -25,16 +31,9 @@ class CreateUserService {
   }: IUserRequest): Promise<User> {
     const usersRepository = getCustomRepository(UsersRepositories);
 
-    const regexUsername = new RegExp('^[a-zA-Z0-9_-]{5,30}$');
-    const regexEmail = new RegExp('[^@ \t\r\n]+@[^@ \t\r\n]+.[^@ \t\r\n]+');
-    const regexGeneric = new RegExp('^[a-zA-Z ]{3,30}$');
-    const regexUrl = new RegExp(
-      'https?://(www.)?[-a-zA-Z0-9@:%._+~#=]{1,256}.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)',
-    );
-
     if (!username) {
       throw new Error('Missing required field: username');
-    } else if (!regexUsername.test(username)) {
+    } else if (!verifyUsername(username)) {
       throw new Error('Invalid username');
     }
 
@@ -47,31 +46,31 @@ class CreateUserService {
 
     if (!name) {
       throw new Error('Missing required field: name');
-    } else if (!regexGeneric.test(name)) {
+    } else if (!verifyField(name)) {
       throw new Error('Invalid name');
     }
 
     if (lastName) {
-      if (!regexGeneric.test(lastName)) {
+      if (!verifyField(lastName)) {
         throw new Error('Invalid last name');
       }
     }
 
     if (profileImageUrl) {
-      if (!regexUrl.test(profileImageUrl)) {
+      if (!verifyUrl(profileImageUrl)) {
         throw new Error('Invalid profile image url');
       }
     }
 
     if (bio) {
-      if (!regexGeneric.test(bio)) {
+      if (!verifyField(bio)) {
         throw new Error('Invalid bio');
       }
     }
 
     if (!email) {
       throw new Error('Missing required field: email');
-    } else if (!regexEmail.test(email)) {
+    } else if (!verifyEmail(email)) {
       throw new Error('Invalid email');
     }
 
