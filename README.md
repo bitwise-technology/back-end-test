@@ -22,10 +22,10 @@ Buscamos pessoas que gostem de aprender, que não tenham medo de falhar e que n�
 
 Como você irá ver, nós somos fãs do Github e nada mais justo que fazer um desafio baseado nessa API sensacional! 
 
-Basicamente você tem a responsabilidade de criar uma Restful API usando a [API de GraphQL do Github](https://docs.github.com/en/graphql) que tenha as seguintes features:
+Basicamente você tem a responsabilidade de criar uma CRUD Restful API integrando algumas funcionalidades existentes na API [Github](https://docs.github.com/en/rest) que tenha as seguintes features:
 
 - Realizar cadastro do usuário
-  - Crie um ou mais endpoits para realizar o cadastro do usuário com as informações da entidade abaixo
+  - Crie um ou mais endpoits para realizar o cadastro do usuário com as informações da entidade abaixo. (Obs: esse endpoint irá criar o usuário no banco de dados sem ter integração com o github)
 - Realizar cadastro do usuário usando as informaçoes disponiveis no Github
   - Crie um enpoint pelo qual o usuário possa criar uma conta passando somente o username do github
   - Se username for valido, cadastrar o usuário com as informaçoes do Github ( Os dados devem ser mapeados da API do Github para sua API )
@@ -33,8 +33,8 @@ Basicamente você tem a responsabilidade de criar uma Restful API usando a [API 
 - Realizar update das informaçoes do usuário
   - Crie um ou mais endpoints para atualizar as informaçoes do usuário  
 - Consultar informaçoes de um determinado usúario por email ou username
-  - Crie um ou mais endpoints para consultar as informaçoes cadastradas
-  - Ao consultar o perfil do usuário cadastrado, realizar consulta no api do github e adicionar as seguinte informações caso o usuário possua uma conta: Quantidade de Followers, Quantidade de Following, Quantidade de repositorios publicos, URL publica para o profile desse usuário no Github.
+  - Crie um ou mais endpoints para consultar as informaçoes cadastradas no bando de dados
+  - Ao consultar o perfil do usuário cadastrado, realizar consulta na api do github e adicionar as seguinte informações caso o usuário possua uma conta: Quantidade de Followers, Quantidade de Following, Quantidade de repositorios publicos, URL publica para o profile desse usuário no Github.
 
 ```
 Definição da Entidade: 
@@ -73,13 +73,10 @@ Definição da Entidade:
   
 As exceções para as regras de cada campo devem ser tratadas e enviadas para o usuário com suas respectivas mensagens de erros e código de status. 
 Ex: 
-  - Se caso o usuário esquecer de enviar um campo obrigatório:  Response status: 400 bad request, Response Message: Missing required field: username
+  - Se caso o usuário esquecer de enviar um campo obrigatório:  Response status: 400 bad request, Response Message: Missing required field: <filed name>
 ```
 
 Você pode usar qualquer tipo de tecnologia para entregar o projeto como: NodeJS, Ruby on Rails, MongoDB e etc.. Não existe limites ou formas erradas de fazer o projeto. Assim como o modelo e o desafio que passamos é totalmente passivo de modificação pelo desafiante, ou seja, nós inserimos somente a informaçoes basicas sinta-se livre em alterar a entidade com outras informaçoes que você acha pertinente ou obrigatoria para o seu CRUD.
-
-
-OBS: *É muito importante para analisarmos sua capacidade de adaptação a novas tecnologias que o projeto seja implementado utilizando a integração  pela **API de GraphQL do Github**, mas se caso você encontre muitos problemas para entender ou implementar o GraphQL, como fallback você pode utilizar a versão **REST** , mas lembre-se, que ao fazer isso você irá perder uma grande quantidade pontos no nosso teste.*
 
 
 ### Adicionais
@@ -90,11 +87,10 @@ Caso você consiga completar todas tarefas acima e queira nós mostrar que você
 
 ## O que iremos avaliar?
 
-- Adaptação a novos tipos de tecnologias como API de GraphQL do Github
+- Adaptação a novos tipos de tecnologias
 - Coesão das mensagens dos commits
 - Testes automatizados como (Unit Test, UI Test ...)
 - Estrutura do projeto
 - Nomenclatura de classes, funções e métodos
-- Conhecimento em CI/CD
 - Aplicação de Design Patterns
 - Documentaçao da API com ferramentas como Swagger/OpenAPI/...
