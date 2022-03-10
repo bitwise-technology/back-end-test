@@ -1,17 +1,18 @@
-import pprint
 import requests
 
 def informacoes_usuarios(user):
     GitHub = requests.get("https://api.github.com/users/" + user)
-
     GitHub = GitHub.json()
-    name = GitHub['name']
-    followers = GitHub['followers']
-    following = GitHub['following']
-    repositorios =  GitHub['public_repos']
-    url = GitHub['html_url']
-    print("Nome do usuário:",name)
-    print("Quantidade de Followers: ",followers)
-    print("Quantidade de Following: ", following)
-    print("Quantidade de repositorios publicos: ",repositorios)
-    print("URL publica : ", url)
+
+    informacoes=['name','followers','following','public_repos','html_url']
+    nome_informacoes=["Nome do usuário:","Quantidade de Followers: ","Quantidade de Following: ","Quantidade de repositorios publicos: ","URL publica : "]
+
+    for i in range(len(informacoes)):
+        info = GitHub[informacoes[i]]
+        print(nome_informacoes[i],info)
+
+
+def informacoes_usuarios_email(email):
+    GitHub = requests.patch("https://api.github.com//user/"+email+"/ visibility")
+    GitHub = GitHub.json()
+    print(GitHub)
