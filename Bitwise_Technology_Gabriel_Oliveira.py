@@ -1,5 +1,6 @@
-import Consultar_Informações
-import Realizar_Cadastro
+import Consultar_Informações_Cadastro
+import requests
+import Verificar_usuarios_entidades
 while True:
     print('-----------------------------------------------')
     print("Bitwise - Desafio Backend")
@@ -10,29 +11,50 @@ while True:
     print("4 - Consultar informaçoes de um determinado usúario por email ou username")
     print("0 - Sair da aplicação")
     print('-----------------------------------------------')
-    escolha=int(input("Escolha uma das opções acima: "))
-    if escolha == 1:
-        print(escolha)
-    elif escolha == 2:
-        print(escolha)
-    elif escolha == 3:
-        print(escolha)
-    elif escolha == 4:
-
-        while True:
-            opcao=int(input("Digite 1 para o username ou 2 para o email: "))
-            if opcao == 1:
+    try:
+        escolha=int(input("Escolha uma das opções acima: "))
+        if escolha == 1:
+            Consultar_Informações_Cadastro.cadastro_usuario()
+        elif escolha == 2:
+            while True:
                 username = input("Informe seu username do GitHub: ")
-                Consultar_Informações.informacoes_usuarios(username)
+                valido = Verificar_usuarios_entidades.validar_usuario_git(username)
+                if valido == True:
+                    GitHub = requests.get("https://api.github.com/users/" + username)
+                    GitHub = GitHub.json()
+                    Consultar_Informações_Cadastro.informacoes_usuarios(GitHub, 1)
+                else:
+                    print("Usuario invalido!Digite novamente")
+                break
 
-            elif opcao == 2:
-                email = input("Informe seu email do GitHub : ")
-                Consultar_Informações.informacoes_usuarios_email(email)
-            else:
-                print("Escolha uma opção valida!")
+        elif escolha == 3:
+            print(escolha)
+        elif escolha == 4:
 
-    elif escolha == 0:
-        print("Obrigado !")
-        break
-    else:
+            while True:
+                opcao=int(input("Digite 1 para o username ou 2 para o email: "))
+                if opcao == 1:
+                    while True:
+                        username = input("Informe seu username do GitHub: ")
+                        valido = Verificar_usuarios_entidades.validar_usuario_git(username)
+                        if valido == True:
+                            GitHub = requests.get("https://api.github.com/users/" + username)
+                            GitHub = GitHub.json()
+                            Consultar_Informações_Cadastro.informacoes_usuarios(GitHub,2)
+                        else:
+                            print("Usuario invalido!Digite novamente")
+                        break
+
+                    break
+                elif opcao == 2:
+                    email = input("Informe seu email do GitHub : ")
+
+                    break
+                else:
+                    print("Escolha uma opção valida!")
+
+        elif escolha == 0:
+            print("Obrigado !")
+            break
+    except:
         print("Opção invalida, escolha novamente!!")
