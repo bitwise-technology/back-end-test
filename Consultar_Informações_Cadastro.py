@@ -10,14 +10,14 @@ def informacoes_usuarios(GitHub,opcao):
     elif opcao==2:
 
         print(GitHub)
-       # informacoes=['name','followers','following','public_repos','html_url']
-       # nome_informacoes=["Nome do usuário:","Quantidade de Followers: ","Quantidade de Following: ","Quantidade de repositorios publicos: ","URL publica : "]
+        informacoes=['name','followers','following','public_repos','html_url']
+        nome_informacoes=["Nome do usuário:","Quantidade de Followers: ","Quantidade de Following: ","Quantidade de repositorios publicos: ","URL publica : "]
 
 
 
-       # for i in range(len(informacoes)):
-      #      info = GitHub[informacoes[i]]
-      #      print(nome_informacoes[i],info)
+        for i in range(len(informacoes)):
+            info = GitHub[informacoes[i]]
+            print(nome_informacoes[i],info)
 
 
 def cadastro_usuario():
