@@ -13,7 +13,7 @@ def validar_usuario_git(user):
 def validar_entidades(palavra,enti,menor, maior, alfanumerico_ou_letras):
     tamanho = len(palavra)
 
-    if palavra >= menor and palavra <= maior:
+    if tamanho >= menor and tamanho <= maior:
         if alfanumerico_ou_letras == 1:
             return True;
         elif alfanumerico_ou_letras == 2:
