@@ -1,6 +1,14 @@
 import Consultar_Informações_Cadastro
 import requests
 import Verificar_usuarios_entidades
+import Banco_de_dados
+import os
+
+# Criando o banco de dados
+create_db = not os.path.isfile('Bitwise_Gabriel_Oliveira.db')
+if create_db:
+  Banco_de_dados.criar_BD()
+
 while True:
     print('-----------------------------------------------')
     print("Bitwise - Desafio Backend")
@@ -23,12 +31,21 @@ while True:
                     GitHub = requests.get("https://api.github.com/users/" + username)
                     GitHub = GitHub.json()
                     Consultar_Informações_Cadastro.informacoes_usuarios(GitHub, 1)
+
                 else:
-                    print("Usuario invalido!Digite novamente")
+                    print("Usuario invalido ou já cadastrado!Digite novamente")
+                break
+        elif escolha == 3:
+            while True:
+                username = input("Informe seu username do GitHub: ")
+                valido = Banco_de_dados.update_registros(username)
+                if valido == True:
+                    print("ok")
+
+                else:
+                    print("Usuario invalido ou já cadastrado!Digite novamente")
                 break
 
-        elif escolha == 3:
-            print(escolha)
         elif escolha == 4:
 
             while True:
