@@ -5,7 +5,7 @@ def informacoes_usuarios(GitHub,opcao):
     if opcao==1: #Registro atraves do github
         Banco_de_dados.add_usuario(GitHub['login'],GitHub['name'],"Null",GitHub['avatar_url'],GitHub['bio'],'Null','Not Specified',GitHub['followers'],GitHub['following']
                                    ,GitHub['public_repos'],GitHub['html_url'])
-
+        return
 
 
     elif opcao==2:#Consulta atraves da api do github
