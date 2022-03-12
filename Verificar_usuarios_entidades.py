@@ -12,14 +12,16 @@ def validar_usuario_git(user):
 
 def validar_entidades(palavra,enti,menor, maior, alfanumerico_ou_letras):
     tamanho = len(palavra)
+    pala =  palavra
+    lista = list(pala)
 
     if tamanho >= menor and tamanho <= maior:
         if alfanumerico_ou_letras == 1:
             return True;
         elif alfanumerico_ou_letras == 2:
-            for i in range(len(palavra)):
-                if palavra[i]=='0' or palavra[i]=='1' or palavra[i]=='2' or palavra[i]=='3' or palavra[i]=='4' or palavra[i]=='5' or palavra[i]=='6' or palavra[i]=='7' or palavra[i]=='8' or palavra[i]=='9':
+            for i in range(len(lista)):
+                if lista[i]=='0' or lista[i]=='1' or lista[i]=='2' or lista[i]=='3' or lista[i]=='4' or lista[i]=='5' or lista[i]=='6' or lista[i]=='7' or lista[i]=='8' or lista[i]=='9':
                     print("Essa entidade só aceita letras!")
-                    entidade = input("Informe a entidade novamente! ("+enti+")")
-                    validar_entidades(entidade,enti,menor,maior,alfanumerico_ou_letras)
-            return True
+                    return False
+
+    return True
