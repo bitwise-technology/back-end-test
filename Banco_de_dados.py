@@ -37,6 +37,7 @@ def add_usuario(username: str, name :str, lastName: str, profileImageUrl: str,bi
 
                 conn.commit()
                 return result[0]
+
             else:
                 conn.commit()
                 return result[0]
