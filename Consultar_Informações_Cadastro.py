@@ -24,7 +24,7 @@ def cadastro_usuario():
         username = input("Informe seu username: ")
         tamanho = len(username)
         if tamanho!=0:
-            ok=Verificar_usuarios_entidades.validar_entidades(username,"username",5,30,1)
+            ok=Verificar_usuarios_entidades.validar_entidades(username,5,30,1)
             if ok==True:
                 break
         elif tamanho==0:
@@ -33,7 +33,7 @@ def cadastro_usuario():
         name = input("Informe seu nome: ")
         tamanho = len(name)
         if tamanho != 0:
-           ok=Verificar_usuarios_entidades.validar_entidades(name,"name",3,30,2)
+           ok=Verificar_usuarios_entidades.validar_entidades(name,3,30,2)
            if ok==True:
                 break
         elif tamanho == 0:
@@ -43,23 +43,28 @@ def cadastro_usuario():
         lastName = input("Informe seu sobrenome (opcional): ")
         tamanho = len(lastName)
         if tamanho != 0:
-           ok=Verificar_usuarios_entidades.validar_entidades(lastName, "sobrenome", 3, 30, 2)
+           ok=Verificar_usuarios_entidades.validar_entidades(lastName, 3, 30, 2)
            if ok == True:
                break
+        elif tamanho == 0:
+            lastName="null"
+
         break
     while True:
         bio = input("Informe a sua bio (opcional): ")
         tamanho = len(bio)
         if tamanho != 0:
-           ok=Verificar_usuarios_entidades.validar_entidades(name, "name", 3, 30, 2)
+           ok=Verificar_usuarios_entidades.validar_entidades(name, 3, 30, 2)
            if ok == True:
                break
+        elif tamanho == 0:
+            bio = "null"
         break
     email = input("Informe seu email: ")
     gender = input("Informe seu genero (opcional): ")
     tamanho = len(gender)
     if tamanho == 0:
        gender = 'Not Specified'
-
+    Banco_de_dados.add_usuario(username,name,lastName,"null",bio,email,gender,0,0,0,"null")
 
 
