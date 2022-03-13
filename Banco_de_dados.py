@@ -51,11 +51,56 @@ def update_registros(user):
         with closing(conn.cursor()) as cursor:
             cursor.execute('PRAGMA foreign_keys = ON;')
             cursor.execute('''SELECT id_usuario  FROM Usuario WHERE username = ?''', (user,))
-            print(cursor)
+
             result = cursor.fetchone()
             if result == None:
                 print("Não é possivel fazer o update, pois o usuario não estar cadastrado na base de dados!")
                 return False
             else:
-                print("Usuario já foi cadastrado no nosso Banco de dados")
+                print("Usuário apto para fazer o update")
+                print("Qual o registro que você deseja fazer o update?")
+                print("1- Username")
+                print("2- Nome")
+                print("3- Sobrenome")
+                print("4- Url de perfil")
+                print("5- Bio")
+                print("6- Email")
+                print("7- Genero")
+                print("0 - Retornar para o menu")
+                opcao = int(input("Escolha uma opção:"))
+                if opcao ==1:
+                    username = input("Informe o novo Username:")
+                    cursor.execute('PRAGMA foreign_keys = ON;')
+                    cursor.execute("Update Usuario SET username = ? WHERE username = ? ",(username, user,))
+                    print("Username atualizado com sucesso!")
+                elif opcao==2:
+                    nome = input("Informe o novo nome:")
+                    cursor.execute('PRAGMA foreign_keys = ON;')
+                    cursor.execute("Update Usuario SET name = ? WHERE username = ? ", (nome, user,))
+                    print("Nome atualizado com sucesso!")
+                elif opcao == 3:
+                    sobrenome = input("Informe o novo sobrenome:")
+                    cursor.execute('PRAGMA foreign_keys = ON;')
+                    cursor.execute("Update Usuario SET lastName = ? WHERE username = ? ", (sobrenome, user,))
+                    print("Sobrenome atualizado com sucesso!")
+                elif opcao==4:
+                    Url_Perfil = input("Informe a nova url do perfil:")
+                    cursor.execute('PRAGMA foreign_keys = ON;')
+                    cursor.execute("Update Usuario SET profileImageUrl = ? WHERE username = ? ", (Url_Perfil, user,))
+                    print("Url de perfil atualizado com sucesso!")
+                elif opcao==5:
+                    bio = input("Informe a nova bio:")
+                    cursor.execute('PRAGMA foreign_keys = ON;')
+                    cursor.execute("Update Usuario SET bio = ? WHERE username = ? ", (bio, user,))
+                    print("Bio atualizado com sucesso!")
+                elif opcao==6:
+                    email = input("Informe o novo email:")
+                    cursor.execute('PRAGMA foreign_keys = ON;')
+                    cursor.execute("Update Usuario SET email = ? WHERE username = ? ", (email, user,))
+                    print("Email atualizado com sucesso!")
+                elif opcao ==7:
+                    genero = input("Informe o novo genero:")
+                    cursor.execute('PRAGMA foreign_keys = ON;')
+                    cursor.execute("Update Usuario SET gender = ? WHERE username = ? ", (genero, user,))
+                    print("Genero atualizado com sucesso!")
                 conn.commit()

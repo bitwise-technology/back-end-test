@@ -39,12 +39,6 @@ while True:
             while True:
                 username = input("Informe seu username do GitHub: ")
                 valido = Banco_de_dados.update_registros(username)
-                if valido == True:
-                    print("ok")
-
-                else:
-                    print("Usuario invalido ou já cadastrado!Digite novamente")
-                break
 
         elif escolha == 4:
 
