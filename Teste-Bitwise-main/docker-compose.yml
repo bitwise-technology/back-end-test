@@ -1,0 +1,49 @@
+version: "3.7"
+services:
+  web: 
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    ports: 
+      - "80:80"
+      - "465:465"
+      - "8080:8080"
+    volumes:
+    - ./:/var/www
+    - ./conf/nginx/site.conf:/etc/nginx/conf.d/site.conf
+    networks:
+    - project
+
+  php:
+    build: .
+    container_name: php-fpm
+    volumes:
+    - ./:/var/www
+    networks:
+      - project
+  
+  db:
+    image: mysql:5.7.27
+    container_name: mysql
+    ports:
+     - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./conf/mysql:/docker-entrypoint-initdb.d
+      - db-volume:/var/lib/mysql
+    networks:
+      - project
+
+volumes:
+  db-volume:
+
+networks:
+  project:
+    driver: bridge

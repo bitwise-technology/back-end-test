@@ -1,0 +1,15 @@
+{
+    "require": {
+        "webonyx/graphql-php": "^14.11",
+        "slim/slim": "3.*",
+        "twig/twig": "^3.0",
+        "tuupola/slim-jwt-auth": "3.5",
+        "vlucas/phpdotenv": "^5.4"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "App\\" : "App/"
+        }
+    }
+}
