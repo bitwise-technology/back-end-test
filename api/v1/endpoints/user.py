@@ -1,4 +1,3 @@
-import email
 from typing import List
 
 from fastapi import APIRouter
@@ -34,17 +33,86 @@ async def post_user(user: UserModel, db: AsyncSession = Depends(get_session)):
         bio=user.bio,    
         gender=user.gender
     )
+    
+    async with db as session:
+        queryUsername = select(UserModel).filter(UserModel.userName == user.userName)
+        resultUsername = await session.execute(queryUsername)
+        userName_result: UserModel = resultUsername.scalar_one_or_none()
 
-    db.add(new_user)
-    await db.commit()
+        queryEmail = select(UserModel).filter(UserModel.email == user.email)
+        resultEmail = await session.execute(queryEmail)
+        email_result: UserModel = resultEmail.scalar_one_or_none()
+        
+        # Validate Username none
+        if user.userName == None:
+            raise HTTPException(
+                detail='Missing required field: Username', 
+                status_code=status.HTTP_400_BAD_REQUEST)
+        # Validate Name none
+        elif user.name == None:
+            raise HTTPException(
+                detail='Missing required field: Name', 
+                status_code=status.HTTP_400_BAD_REQUEST)
+        # Validate Name must be 3 to 30 characters long
+        elif len(user.name) < 3 or len(user.name) > 30:
+            raise HTTPException(
+                detail='Name must be 3 to 30 characters long', 
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        # Validate Name cannot contain numbers
+        elif any(i.isdigit() for i in user.name):
+            raise HTTPException(
+                detail='Name cannot contain numbers', 
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        # Validate Username must be 5 to 30 characters long
+        elif len(user.userName) < 5 or len(user.userName) > 30:
+            raise HTTPException(
+                detail='Name must be 5 to 30 characters long', 
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        # Validate Username unique
+        elif userName_result:
+            raise HTTPException(
+                detail='Username is already in use', 
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        # Validate Email none
+        if user.email == None:
+            raise HTTPException(
+                detail='Missing required field: Email', 
+                status_code=status.HTTP_400_BAD_REQUEST)
+        # Validate email @
+        elif '@' not in user.email:
+            raise HTTPException(
+                detail='Invalid email', 
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        # Validate Email unique
+        elif email_result:
+            raise HTTPException(
+                detail='Email is already in use', 
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        # Validate Bio must be 3 to 30 characters long
+        elif (user.bio != None) and (len(user.bio) < 3 or len(user.bio) > 30):
+            raise HTTPException(
+                detail='Bio must be 3 to 30 characters long', 
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        # Validate bio cannot contain numbers
+        elif (user.bio != None) and (any(i.isdigit() for i in user.bio)):
+            raise HTTPException(
+                detail='Bio cannot contain numbers', 
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        else:
+            db.add(new_user)
+            await db.commit()    
 
     return new_user
 
 # GET USER
-@router.get('/{user_id}', response_model=UserModel, status_code=status.HTTP_200_OK)
-async def get_user(user_id: int, db: AsyncSession = Depends(get_session)):
+@router.get('/{identify_user}', response_model=UserModel, status_code=status.HTTP_200_OK)
+async def get_user(identify_user: str, db: AsyncSession = Depends(get_session)):
     async with db as session:
-        query = select(UserModel).filter(UserModel.id == user_id)
+        if '@' in identify_user:
+            query = select(UserModel).filter(UserModel.email == identify_user)
+        else:
+            query = select(UserModel).filter(UserModel.userName == identify_user)
+        
         result = await session.execute(query)
         user: UserModel = result.scalar_one_or_none()
 

@@ -5,10 +5,10 @@ class UserModel(SQLModel, table=True):
     __tablename__: str = "users"
 
     id: Optional[int] = Field(default=None, primary_key=True)
-    userName: str
-    email: str
-    name: str    
+    userName: Optional[str]
+    email: Optional[str]
+    name: Optional[str]    
     lastName: Optional[str]
     profileImageUrl: Optional[str]
     bio: Optional[str]    
-    gender: Optional[str]
+    gender: Optional[str] = "Not Specified"
