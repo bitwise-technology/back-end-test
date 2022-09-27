@@ -11,6 +11,9 @@ from sqlmodel import select
 
 from models.user_model import UserModel
 from core.deps import get_session
+from core.configs import settings
+import requests
+import json
 
 #Bypass worning SQLModel select
 from sqlmodel.sql.expression import Select, SelectOfScalar
@@ -101,6 +104,48 @@ async def post_user(user: UserModel, db: AsyncSession = Depends(get_session)):
         else:
             db.add(new_user)
             await db.commit()    
+
+    return new_user
+
+# POST USER GITHUB
+@router.post('/github', status_code=status.HTTP_201_CREATED, response_model=UserModel)
+async def post_user_github(user: UserModel, db: AsyncSession = Depends(get_session)):
+    request = requests.get(settings.BASE_URL_GITHUB + "/users/" + user.userName)
+    userJson = json.loads(request.content)
+
+    name = None if userJson["name"] is None else userJson["name"].split()
+    nameUser = name if name is None else name[0]
+    lastNameUser = name if name is None else name[len(name) -1]
+    bio = None if userJson["bio"] is None else userJson["bio"][:30]
+
+    new_user = UserModel(
+        userName=userJson["login"],
+        email=userJson["email"],
+        name=nameUser,   
+        lastName=lastNameUser,
+        profileImageUrl=userJson["avatar_url"],
+        bio=bio,   
+        gender=None
+    )
+
+    async with db as session:
+        queryUsername = select(UserModel).filter(UserModel.userName == user.userName)
+        resultUsername = await session.execute(queryUsername)
+        userName_result: UserModel = resultUsername.scalar_one_or_none()
+
+        # Validate Username unique
+        if userName_result:
+          raise HTTPException(
+              detail='Username is already in use', 
+              status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        # Validate Name none
+        elif name is None:
+            raise HTTPException(
+                detail='Missing required field: Name', 
+                status_code=status.HTTP_400_BAD_REQUEST)
+        else:
+            db.add(new_user)
+            await db.commit()
 
     return new_user
 
