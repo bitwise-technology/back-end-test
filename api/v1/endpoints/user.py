@@ -25,7 +25,11 @@ Select.inherit_cache = True # type: ignore
 router = APIRouter()
 
 # POST USER
-@router.post('/', status_code=status.HTTP_201_CREATED, response_model=UserModel)
+@router.post('/', 
+    status_code=status.HTTP_201_CREATED, 
+    response_model=UserModel,
+    summary="Cadastro de usuário"
+)
 async def post_user(user: UserModel, db: AsyncSession = Depends(get_session)):
     new_user = UserModel(
         userName=user.userName,
@@ -108,7 +112,12 @@ async def post_user(user: UserModel, db: AsyncSession = Depends(get_session)):
     return new_user
 
 # POST USER GITHUB
-@router.post('/github', status_code=status.HTTP_201_CREATED, response_model=UserModel)
+@router.post('/github', 
+    status_code=status.HTTP_201_CREATED, 
+    response_model=UserModel,
+    summary="Cadastro de usuário com Github",
+    description="Cadastro de usuário utilizando dados do Github"
+)
 async def post_user_github(user: UserModel, db: AsyncSession = Depends(get_session)):
     request = requests.get(settings.BASE_URL_GITHUB + "/users/" + user.userName)
     userJson = json.loads(request.content)
@@ -150,7 +159,12 @@ async def post_user_github(user: UserModel, db: AsyncSession = Depends(get_sessi
     return new_user
 
 # GET USER
-@router.get('/{identify_user}', response_model=UserGithubModel, status_code=status.HTTP_200_OK)
+@router.get('/{identify_user}', 
+    response_model=UserGithubModel, 
+    status_code=status.HTTP_200_OK,
+    summary="Consultar usuário",
+    description="Consultar usuário por e-mail/username"
+)
 async def get_user(identify_user: str, db: AsyncSession = Depends(get_session)):
     async with db as session:
         if '@' in identify_user:
@@ -184,7 +198,12 @@ async def get_user(identify_user: str, db: AsyncSession = Depends(get_session)):
     return user_response
 
 # PUT USER
-@router.put('/{user_id}', response_model=UserModel, status_code=status.HTTP_202_ACCEPTED)
+@router.put('/{user_id}', 
+    response_model=UserModel, 
+    status_code=status.HTTP_202_ACCEPTED,
+    summary="Atualizar usuário",
+    description="Atualizar o usuário por meio do id"
+)
 async def put_user(user_id: int, user: UserModel, db: AsyncSession = Depends(get_session)):
     async with db as session:
         query = select(UserModel).filter(UserModel.id == user_id)
