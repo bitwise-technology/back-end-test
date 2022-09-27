@@ -9,7 +9,7 @@ from fastapi import Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
-from models.user_model import UserModel
+from models.user_model import UserModel, UserGithubModel
 from core.deps import get_session
 from core.configs import settings
 import requests
@@ -150,7 +150,7 @@ async def post_user_github(user: UserModel, db: AsyncSession = Depends(get_sessi
     return new_user
 
 # GET USER
-@router.get('/{identify_user}', response_model=UserModel, status_code=status.HTTP_200_OK)
+@router.get('/{identify_user}', response_model=UserGithubModel, status_code=status.HTTP_200_OK)
 async def get_user(identify_user: str, db: AsyncSession = Depends(get_session)):
     async with db as session:
         if '@' in identify_user:
@@ -162,9 +162,26 @@ async def get_user(identify_user: str, db: AsyncSession = Depends(get_session)):
         user: UserModel = result.scalar_one_or_none()
 
         if user:
-            return user
+            request = requests.get(settings.BASE_URL_GITHUB + "/users/" + user.userName)
+            userJson = json.loads(request.content)
+
+            user_response = UserGithubModel(
+                id=user.id,
+                userName=user.userName,
+                email=user.email,
+                name=user.name,  
+                lastName=user.lastName,
+                profileImageUrl=user.profileImageUrl,
+                bio=user.bio,   
+                gender=user.gender,
+                followers=userJson["followers"],
+                following=userJson["following"],
+                public_repos=userJson["public_repos"],
+                url_public=userJson["html_url"]
+            )
         else:
             raise HTTPException(detail='User not found', status_code=status.HTTP_404_NOT_FOUND)
+    return user_response
 
 # PUT USER
 @router.put('/{user_id}', response_model=UserModel, status_code=status.HTTP_202_ACCEPTED)
@@ -175,16 +192,62 @@ async def put_user(user_id: int, user: UserModel, db: AsyncSession = Depends(get
         user_up: UserModel = result.scalar_one_or_none()
 
         if user_up:
-            user_up.userName=user.userName
-            user_up.email=user.email
-            user_up.name=user.name    
-            user_up.lastName=user.lastName
-            user_up.profileImageUrl=user.profileImageUrl
-            user_up.bio=user.bio  
-            user_up.gender=user.gender
+            # Validate Username none
+            if user.userName == None:
+                raise HTTPException(
+                    detail='Missing required field: Username', 
+                    status_code=status.HTTP_400_BAD_REQUEST)
+            # Validate Name none
+            elif user.name == None:
+                raise HTTPException(
+                    detail='Missing required field: Name', 
+                    status_code=status.HTTP_400_BAD_REQUEST)
+            # Validate Name must be 3 to 30 characters long
+            elif len(user.name) < 3 or len(user.name) > 30:
+                raise HTTPException(
+                    detail='Name must be 3 to 30 characters long', 
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            # Validate Name cannot contain numbers
+            elif any(i.isdigit() for i in user.name):
+                raise HTTPException(
+                    detail='Name cannot contain numbers', 
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            # Validate Username must be 5 to 30 characters long
+            elif len(user.userName) < 5 or len(user.userName) > 30:
+                raise HTTPException(
+                    detail='Name must be 5 to 30 characters long', 
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            # Validate Email none
+            if user.email == None:
+                raise HTTPException(
+                    detail='Missing required field: Email', 
+                    status_code=status.HTTP_400_BAD_REQUEST)
+            # Validate email @
+            elif '@' not in user.email:
+                raise HTTPException(
+                    detail='Invalid email', 
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            # Validate Bio must be 3 to 30 characters long
+            elif (user.bio != None) and (len(user.bio) < 3 or len(user.bio) > 30):
+                raise HTTPException(
+                    detail='Bio must be 3 to 30 characters long', 
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            # Validate bio cannot contain numbers
+            elif (user.bio != None) and (any(i.isdigit() for i in user.bio)):
+                raise HTTPException(
+                    detail='Bio cannot contain numbers', 
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            else:
+                user_up.userName=user.userName
+                user_up.email=user.email
+                user_up.name=user.name    
+                user_up.lastName=user.lastName
+                user_up.profileImageUrl=user.profileImageUrl
+                user_up.bio=user.bio  
+                user_up.gender=user.gender
 
-            await session.commit()
-            
-            return user_up
+                await session.commit()
+
+                return user_up
         else:
             raise HTTPException(detail='User not found', status_code=status.HTTP_404_NOT_FOUND)
