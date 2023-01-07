@@ -1,9 +1,10 @@
-import { Request, Response, Router } from "express";
+import { Router } from "express";
+import { UserController } from "../controllers/UserController";
+import { schemaValidation } from "../middlewares/schemaValidator";
+import { userSchema } from "../validations/UserSchema";
 
 const routes = Router();
 
-routes.post('/user', (req: Request, res: Response) => {
-    return res.json("Tudo OK!");
-})
+routes.post('/user', schemaValidation(userSchema), new UserController().create);
 
 export default routes;
