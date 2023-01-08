@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { BadRequestError } from '../helpers/api-errors';
+import { BadRequestError, NotFoundError } from '../helpers/api-errors';
 import { userRepository } from '../repositories/userRepository';
 import apiGithub from '../services/apiGithub';
 
@@ -20,44 +20,25 @@ export class UserController {
         }
 
         if (gender !== "Male" && gender !== "male" && gender !== "Female" && gender !== "female" && gender !== undefined) {
-            console.log(gender)
             throw new BadRequestError("There is no such genre.")
         }
 
-        if (gender === undefined) {
-            const newUser = userRepository.create({
-                username,
-                name,
-                last_name: lastname,
-                profile_image_url: image,
-                bio,
-                email,
-                gender: "Not Specified"
-            });
+        const newUser = userRepository.create({
+            username,
+            name,
+            last_name: lastname,
+            profile_image_url: image,
+            bio,
+            email,
+            gender: gender === undefined ? "Not Specified" : gender
+        });
 
 
-            const userData = await userRepository.save(newUser);
+        const userData = await userRepository.save(newUser);
 
 
-            return res.status(201).json(userData);
+        return res.status(201).json(userData);
 
-        } else {
-            const newUser = userRepository.create({
-                username,
-                name,
-                last_name: lastname,
-                profile_image_url: image,
-                bio,
-                email,
-                gender
-            });
-
-
-            const userData = await userRepository.save(newUser);
-
-
-            return res.status(201).json(userData);
-        }
 
     }
 
@@ -86,6 +67,50 @@ export class UserController {
         const userData = await userRepository.save(newUser);
 
         return res.status(201).json(userData);
+
+
+    }
+
+    async update(req: Request, res: Response) {
+        const { id } = req.params;
+        const { username, name, lastname, image, bio, email, gender } = req.body;
+
+        const userExists = await userRepository.findOneBy({ id: Number(id) });
+
+        if (!userExists) {
+            throw new NotFoundError("User not found.");
+        }
+
+        const usernameExists = await userRepository.findOneBy({ username });
+
+        if (usernameExists && username !== userExists.username) {
+            throw new NotFoundError("Another user with that USERNAME already exists.");
+        }
+
+        const emailExists = await userRepository.findOneBy({ email });
+
+        if (emailExists && email !== userExists.email) {
+            throw new NotFoundError("There is already another user with that E-MAIL.");
+        }
+
+        if (gender !== "Male" && gender !== "male" && gender !== "Female" && gender !== "female" && gender !== undefined) {
+            throw new BadRequestError("There is no such genre.")
+        }
+
+        const updatedUser = {
+            id: id ? Number(id) : userExists.id,
+            username: username ? username : userExists.username,
+            name,
+            last_name: lastname,
+            profile_image_url: image,
+            bio,
+            email: email ? email : userExists.email,
+            gender: gender === undefined ? "Not Specified" : gender
+        }
+
+        await userRepository.save(updatedUser);
+
+        return res.status(200).json({ message: "User updated successfully!" });
 
 
     }

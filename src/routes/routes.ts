@@ -7,5 +7,6 @@ const routes = Router();
 
 routes.post('/user', schemaValidation(userSchema), new UserController().create);
 routes.post('/userGithub', new UserController().createUserGithub);
+routes.put('/user/:id', schemaValidation(userSchema), new UserController().update);
 
 export default routes;
