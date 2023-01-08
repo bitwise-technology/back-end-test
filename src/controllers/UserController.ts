@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { BadRequestError } from '../helpers/api-errors';
 import { userRepository } from '../repositories/userRepository';
+import apiGithub from '../services/apiGithub';
 
 export class UserController {
     async create(req: Request, res: Response) {
@@ -58,6 +59,33 @@ export class UserController {
             return res.status(201).json(userData);
         }
 
+    }
+
+    async createUserGithub(req: Request, res: Response) {
+        const { username } = req.body;
+
+        const usernameExists = await userRepository.findOneBy({ username });
+
+        if (usernameExists) {
+            throw new BadRequestError("There is already a registered user with this USERNAME.");
+        }
+
+        const responseGithub = await apiGithub.get(`/users/${username}`);
+
+        const { data } = responseGithub;
+
+        const newUser = userRepository.create({
+            username,
+            name: data.name ? data.name : `Atualize seu NOME: ${username}`,
+            profile_image_url: data.avatar_url,
+            bio: data.bio,
+            email: data.email ? data.email : `${username}@atualizeseuemail.com`,
+            gender: "Not Specified"
+        });
+
+        const userData = await userRepository.save(newUser);
+
+        return res.status(201).json(userData);
 
 
     }
