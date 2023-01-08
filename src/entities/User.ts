@@ -26,15 +26,4 @@ export class User {
     @Column({ type: 'text', nullable: true })
     gender: string
 
-    @Column({ type: 'integer', nullable: true })
-    followers: number
-
-    @Column({ type: 'integer', nullable: true })
-    following: number
-
-    @Column({ type: 'integer', nullable: true })
-    public_repos: number
-
-    @Column({ type: 'text', nullable: true })
-    public_url_user: string
 }

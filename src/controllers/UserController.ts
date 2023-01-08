@@ -39,7 +39,6 @@ export class UserController {
 
         return res.status(201).json(userData);
 
-
     }
 
     async createUserGithub(req: Request, res: Response) {
@@ -67,7 +66,6 @@ export class UserController {
         const userData = await userRepository.save(newUser);
 
         return res.status(201).json(userData);
-
 
     }
 
@@ -112,6 +110,35 @@ export class UserController {
 
         return res.status(200).json({ message: "User updated successfully!" });
 
+    }
+
+    async readUsername(req: Request, res: Response) {
+        const { username } = req.params;
+
+        const usernameExists = await userRepository.findOneBy({ username });
+
+        if (!usernameExists) {
+            throw new BadRequestError("There is no user registered with this USERNAME.");
+        }
+
+        const responseGithub = await apiGithub.get(`/users/${usernameExists.username}`);
+        
+        const { data } = responseGithub;
+        
+        const userData = {
+            id: data.id,
+            username: data.login,
+            name: data.name,
+            image: data.avatar_url,
+            bio: data.bio,
+            email: data.email,
+            followers: data.followers,
+            following: data.following,
+            public_repos: data.public_repos,
+            public_url_user: data.html_url
+        }
+
+        return res.status(200).json(userData);
 
     }
 }
