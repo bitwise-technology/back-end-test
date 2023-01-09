@@ -10,5 +10,6 @@ routes.post('/userGithub', new UserController().createUserGithub);
 routes.put('/user/:id', schemaValidation(userSchema), new UserController().update);
 routes.get('/user/username/:username', new UserController().readUsername);
 routes.get('/user/email/:email', new UserController().readEmail);
+routes.delete('/user/:id', new UserController().delete);
 
 export default routes;

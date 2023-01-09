@@ -103,7 +103,7 @@ export class UserController {
                             }
                         }
                     }
-                    
+
                     return res.status(400).json({ message: `User not found on GITHUB. Why not try one of these USERNAMES? ${listOfPossibleNewUsers}` });
                 }
             }
@@ -239,6 +239,40 @@ export class UserController {
                     const emailExists = await userRepository.findOneBy({ email });
 
                     return res.status(200).json(emailExists);
+                }
+            }
+
+            return res.status(500).json({ message: "Internal server error." });
+        }
+    }
+
+    async delete(req: Request, res: Response) {
+        const { id } = req.params;
+
+        try {
+            const userExists = await userRepository.findOneBy({ id: Number(id) });
+
+            if (!userExists) {
+                return res.status(404).json({ message: "User not found." });
+            }
+
+            const responseGithub = await apiGithub.get(`/users/${userExists.username}`);
+
+            if (responseGithub) {
+                return res.status(400).json({ message: "It is not possible to delete a user who has an active account on GITHUB." });
+            }
+
+            
+        } catch (error) {
+            if (error instanceof Error) {
+                if (error.message === "Request failed with status code 404") {
+                    const userExists = await userRepository.findOneBy({ id: Number(id) });
+
+                    if (userExists) {
+                        await userRepository.delete(userExists);
+                    }
+        
+                    return res.status(200).json({ message: "User deleted successfully!" });
                 }
             }
 
