@@ -74,6 +74,39 @@ export class UserController {
             return res.status(201).json(userData);
 
         } catch (error) {
+            if (error instanceof Error) {
+                if (error.message === "Request failed with status code 404") {
+                    const responseGithub = await apiGithub.get(`/users`)
+
+                    const { data } = responseGithub;
+
+                    let usernamesGithub = [];
+
+                    for (const user of data) {
+                        usernamesGithub.push(user.login);
+                    }
+
+                    const usersAlreadyRegistered = await userRepository.find();
+
+                    let usersAlreadyRegisteredList = [];
+
+                    for (const user of usersAlreadyRegistered) {
+                        usersAlreadyRegisteredList.push(user.username);
+                    }
+
+                    let listOfPossibleNewUsers = [];
+
+                    for (const user of usersAlreadyRegisteredList) {
+                        for (const newUser of usernamesGithub) {
+                            if (user !== newUser) {
+                                listOfPossibleNewUsers.push(newUser);
+                            }
+                        }
+                    }
+                    
+                    return res.status(400).json({ message: `User not found on GITHUB. Why not try one of these USERNAMES? ${listOfPossibleNewUsers}` });
+                }
+            }
             return res.status(500).json({ message: "Internal server error." });
         }
 
