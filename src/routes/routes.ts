@@ -11,5 +11,6 @@ routes.put('/user/:id', schemaValidation(userSchema), new UserController().updat
 routes.get('/user/username/:username', new UserController().readUsername);
 routes.get('/user/email/:email', new UserController().readEmail);
 routes.delete('/user/:id', new UserController().delete);
+routes.get('/users', new UserController().readUsers);
 
 export default routes;

@@ -262,7 +262,7 @@ export class UserController {
                 return res.status(400).json({ message: "It is not possible to delete a user who has an active account on GITHUB." });
             }
 
-            
+
         } catch (error) {
             if (error instanceof Error) {
                 if (error.message === "Request failed with status code 404") {
@@ -271,11 +271,48 @@ export class UserController {
                     if (userExists) {
                         await userRepository.delete(userExists);
                     }
-        
+
                     return res.status(200).json({ message: "User deleted successfully!" });
                 }
             }
 
+            return res.status(500).json({ message: "Internal server error." });
+        }
+    }
+
+    async readUsers(req: Request, res: Response) {
+
+        try {
+            const allUsers = await userRepository.find();
+
+            let allUsernames = [];
+
+            for (const user of allUsers) {
+                allUsernames.push(user.username);
+            }
+
+            if (allUsers.length < 5) {
+                return res.status(200).json({ message: `It is not possible to paginate due to the number of registered users being less than the minimum, but this is their list: ${allUsernames}` });
+            }
+
+            const min = 1;
+            
+            const max = allUsernames.length;
+
+            const randomNumber = Math.floor(Math.random() * (max - min) + min);
+
+            if (allUsernames.length - randomNumber >= 5) {
+                const pagination = allUsernames.splice(randomNumber, 5);
+
+                return res.status(200).json(pagination);
+
+            } else {
+                const pagination = allUsernames.splice(1, 5);
+
+                return res.status(200).json(pagination);
+            }
+
+        } catch (error) {
             return res.status(500).json({ message: "Internal server error." });
         }
     }
