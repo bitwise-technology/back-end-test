@@ -292,7 +292,7 @@ export class UserController {
             }
 
             if (allUsers.length < 5) {
-                return res.status(200).json({ message: `It is not possible to paginate due to the number of registered users being less than the minimum, but this is their list: ${allUsernames}` });
+                return res.status(400).json({ message: `It is not possible to paginate due to the number of registered users being less than the minimum, but this is their list: ${allUsernames}` });
             }
 
             const min = 1;

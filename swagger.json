@@ -1,0 +1,464 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Users API - Bitwise",
+        "description": "Documentation from users api",
+        "version": "1.0.0",
+        "contact": {
+            "email": "rodrigolanziotti@yahoo.com.br"
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000",
+            "description": "Local server"
+        }
+    ],
+    "basePath": "/",
+    "paths": {
+        "/user": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Common user registration",
+                "description": "This route will be responsible for registering a new user without receiving information from Github.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            },
+                            "example": {
+                                "username": "pedro11",
+                                "name": "Pedro",
+                                "lastname": "Faria",
+                                "image": "https://imagepedro.com",
+                                "bio": "Ama o Futebol e o Pelé!",
+                                "email": "pedro@email.com",
+                                "gender": "male"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/User"
+                                },
+                                "example": {
+                                    "id": 35,
+                                    "username": "pedro11",
+                                    "name": "Pedro",
+                                    "lastname": "Faria",
+                                    "image": "https://imagepedro.com",
+                                    "bio": "Ama o Futebol e o Pelé!",
+                                    "email": "pedro@email.com",
+                                    "gender": "male"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "There is already a registered user with this USERNAME."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/userGithub": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User registration that already has an account on Github",
+                "description": "This route will be responsible for registering a new user, receiving, if any, information from Github.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserGithub"
+                            },
+                            "example": {
+                                "username": "pedro11"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/UserGithub"
+                                },
+                                "example": {
+                                    "username": "alexsandersilv",
+                                    "name": "Alexsander",
+                                    "profile_image_url": "https://avatars.githubusercontent.com/u/81785712?v=4",
+                                    "bio": null,
+                                    "email": "alexsandersilv@atualizeseuemail.com",
+                                    "gender": "Not Specified",
+                                    "last_name": null,
+                                    "id": 37
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "There is already a registered user with this USERNAME."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/{id}": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update a user's data",
+                "description": "This route is to update the data of a registered user",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID whose data you want to change",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            },
+                            "example": {
+                                "username": "pedro112",
+                                "name": "Pedro",
+                                "lastname": "Faria de Carvalho",
+                                "image": "https://imagepedro.com",
+                                "bio": "Ama o Futebol e o Rei Pelé!",
+                                "email": "pedro@email.com",
+                                "gender": "Male"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "User updated successfully!"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "There is no such genre."
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "User not found."
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Delete User by ID",
+                "description": "This route is for delting a registered user",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID you want to delete",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "User deleted successfully!"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "It is not possible to delete a user who has an active account on GITHUB."
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "User not found."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/username/{username}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Query User Information by Username",
+                "description": "Route to search for a user by their username",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "Username of the user you want to meet",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/NewUser"
+                                },
+                                "example": {
+                                    "id": 16124793,
+                                    "username": "Romario11",
+                                    "name": "Roman Savchuk",
+                                    "image": "https://avatars.githubusercontent.com/u/16124793?v=4",
+                                    "bio": null,
+                                    "email": null,
+                                    "followers": 0,
+                                    "following": 0,
+                                    "public_repos": 20,
+                                    "public_url_user": "https://github.com/Romario11"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "There is no user registered with this USERNAME."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/email/{email}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Query User Information by E-mail",
+                "description": "Route to search for a user by their e-mail",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "description": "E-mail of the user you want to meet",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/NewUser"
+                                },
+                                "example": {
+                                    "id": 11,
+                                    "username": "dinamite68",
+                                    "name": "Roberto",
+                                    "last_name": "Dinamite",
+                                    "profile_image_url": "https://imagedinamite.com",
+                                    "bio": "Craque!",
+                                    "email": "roberto@email.com",
+                                    "gender": "Not Specified"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "There is no user registered with this E-MAIL."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "List of registered users' usernames",
+                "description": "This route is to get a list with usernames of registered users with pagination of 5 by 5",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array"
+                                },
+                                "example": [
+                                    "rodrigo87",
+                                    "romario11",
+                                    "byte-is-null",
+                                    "priscila33",
+                                    "dinamite"
+                                ]
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "`It is not possible to paginate due to the number of registered users being less than the minimum, but this is their list: ${allUsernames}`"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "lastname": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string"
+                    },
+                    "bio": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "gender": {
+                        "type": "string"
+                    }
+                }
+            },
+            "UserGithub": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    }
+                }
+            },
+            "NewUser": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "lastname": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string"
+                    },
+                    "bio": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "gender": {
+                        "type": "string"
+                    },
+                    "followers": {
+                        "type": "number"
+                    },
+                    "following": {
+                        "type": "number"
+                    },
+                    "public_repos": {
+                        "type": "number"
+                    },
+                    "public_url_user": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
