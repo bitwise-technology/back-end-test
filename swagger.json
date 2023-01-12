@@ -76,7 +76,7 @@
                 }
             }
         },
-        "/userGithub": {
+        "/user-github": {
             "post": {
                 "tags": [
                     "Users"
