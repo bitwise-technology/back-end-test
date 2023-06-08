@@ -1,10 +1,13 @@
 from user_app.models import UserGithub
 from rest_framework import generics, status
-from user_app.serializers import UserCreateFromGithubSerializer
+from user_app.serializers import UserCreateFromGithubSerializer,UserGithubViewSerializer
 from user_app.services.github_service import GitHubService
 from rest_framework.response import Response
 from user_app.views.utils_views import get_suggested_usernames
 from django.db import IntegrityError
+
+
+
 class UserCreateViewFromGithub(generics.CreateAPIView):
 
     serializer_class = UserCreateFromGithubSerializer
@@ -40,6 +43,24 @@ class UserCreateViewFromGithub(generics.CreateAPIView):
 
 class UserGithubDetailByUsernameView(generics.RetrieveAPIView):
     queryset = UserGithub.objects.all()
-    serializer_class = UserCreateFromGithubSerializer
+    serializer_class = UserGithubViewSerializer
     lookup_field = 'login'
 
+class UserGithubUpdateView(generics.RetrieveUpdateAPIView ):
+    queryset = UserGithub.objects.all()
+    serializer_class = UserGithubViewSerializer
+    lookup_field = 'id'
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        response_data = {
+            'message': 'User updated successfully',
+            'user': serializer.data
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
