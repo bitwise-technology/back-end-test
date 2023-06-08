@@ -2,6 +2,7 @@ from user_app.models import User
 from rest_framework import generics, status
 from user_app.serializers import UserSerializer
 from rest_framework.response import Response
+import requests
 
 # Create your views here.
 
@@ -42,6 +43,27 @@ class UserDetailByUsernameView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = 'username'
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+
+        github_api = f'https://api.github.com/users/{instance.username}'
+        response = requests.get(github_api)
+
+        if response.status_code == 200:
+            github_user_data = response.json()
+            extra_data = {
+                'public_repos': github_user_data.get('public_repos'),
+                'followers': github_user_data.get('followers'),
+                'following': github_user_data.get('following'),
+                'github_profile_url': github_user_data.get('html_url')
+            }
+
+            serializer_data = serializer.data
+            serializer_data.update(extra_data)
+            return Response(serializer_data)
+        return Response(serializer.data)
 
 class UserDetailByEmailView(generics.RetrieveAPIView):
     queryset = User.objects.all()
