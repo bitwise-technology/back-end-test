@@ -10,5 +10,6 @@ urlpatterns = [
 
     path("user/github/create/", UserCreateViewFromGithub.as_view(), name="user_github_create_view"),
     path("user/github/login/<str:login>/", UserGithubDetailByUsernameView.as_view(), name="user_detail_username_view"),
+    path("user/github/update/<int:id>/", UserGithubUpdateView.as_view(), name="user_update_view"),
 
 ]
