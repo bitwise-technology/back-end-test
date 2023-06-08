@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, UserGithub
 import re
 from PIL import Image
 
@@ -37,3 +37,10 @@ class UserSerializer(serializers.ModelSerializer):
             except Exception:
                 raise serializers.ValidationError("The profile must contain a valid picture.")
         return profile_image_url
+
+
+class UserCreateFromGithubSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserGithub
+        fields = ['login']
