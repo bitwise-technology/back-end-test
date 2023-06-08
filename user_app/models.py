@@ -29,3 +29,25 @@ class User(models.Model):
         if self.gender is None:
             self.gender = "Not Specified"
         super().save(*args, **kwargs)
+
+class UserGithub(models.Model):
+    login = models.CharField(max_length=30,unique=True, validators=[MinLengthValidator(5)])
+    name = models.CharField(max_length=40, null=True, blank=True)
+    avatar_url = models.CharField(max_length=255, null=True, blank=True)
+    company = models.CharField(max_length=255, null=True, blank=True)
+    blog = models.CharField(max_length=255, null=True, blank=True)
+    location = models.CharField(max_length=255, null=True, blank=True)
+    email =  models.EmailField(null=True, blank=True)
+    bio = models.CharField(max_length=200, null=True, blank=True)
+    public_repos = models.IntegerField(null=True, blank=True)
+    followers = models.IntegerField(null=True, blank=True)
+    following = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        ordering = ('login',)
+        verbose_name = 'User Github'
+        verbose_name_plural = 'Users Github'
+
+    def __str__(self):
+        return f'{self.login}'
+    
