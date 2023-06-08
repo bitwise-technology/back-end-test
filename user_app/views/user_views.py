@@ -1,6 +1,6 @@
-from .models import User
+from user_app.models import User
 from rest_framework import generics, status
-from .serializers import UserSerializer
+from user_app.serializers import UserSerializer
 from rest_framework.response import Response
 
 # Create your views here.
@@ -47,3 +47,5 @@ class UserDetailByEmailView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = 'email'
+
+
