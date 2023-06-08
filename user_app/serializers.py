@@ -44,3 +44,9 @@ class UserCreateFromGithubSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserGithub
         fields = ['login']
+
+
+class UserGithubViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserGithub
+        fields = ['login', 'name','avatar_url', 'company', 'blog', 'location', 'email', 'bio', 'public_repos', 'followers', 'following']
