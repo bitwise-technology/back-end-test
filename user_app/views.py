@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from .models import User
 from rest_framework import generics, status
 from .serializers import UserSerializer
 from rest_framework.response import Response
@@ -19,3 +19,21 @@ class UserCreateView(generics.CreateAPIView):
         }
 
         return Response(response_data, status=status.HTTP_201_CREATED)
+
+class UserUpdateView(generics.RetrieveUpdateAPIView ):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'id'
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+
+        response_data = {
+            'message': 'User updated successfully',
+            'user': serializer.data
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
