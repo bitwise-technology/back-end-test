@@ -37,3 +37,13 @@ class UserUpdateView(generics.RetrieveUpdateAPIView ):
         }
 
         return Response(response_data, status=status.HTTP_200_OK)
+
+class UserDetailByUsernameView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'username'
+
+class UserDetailByEmailView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'email'
