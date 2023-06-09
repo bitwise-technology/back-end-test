@@ -18,7 +18,13 @@ class UserCreateViewFromGithub(generics.CreateAPIView):
         github_service = GitHubService()
 
         if not github_username:
-            return Response({'error': 'Github username is required'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {
+                    "response_status": f"{status.HTTP_400_BAD_REQUEST} Bad request",
+                    'response_messege': f'Missing required field: login'
+                }, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
         try:
 
