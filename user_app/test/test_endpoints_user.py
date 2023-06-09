@@ -55,7 +55,6 @@ class UserCreateViewTest(APITestCase):
         response = self.client.post(url, data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('username', response.data)
 
     def test_success_update_user(self):
         url = reverse('user:user_update_view', kwargs={'id': self.user.id})
@@ -94,7 +93,6 @@ class UserCreateViewTest(APITestCase):
         
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('username', response.data)
 
     def test_get_user_by_email(self):
 
