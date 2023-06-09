@@ -1,11 +1,12 @@
 from django.db import models
 from django.core.validators import MinLengthValidator
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 # Create your models here.
 GENDER_CHOICES = (
     ('Male', 'Male'),
     ('Female', 'Female'),
-    ('Not Specified', 'Not Specified'),
 )
 
 
@@ -16,7 +17,7 @@ class User(models.Model):
     profile_image_url = models.CharField(max_length=255, null=True, blank=True)
     bio = models.CharField(max_length=30, validators=[MinLengthValidator(3)], null=True, blank=True)
     email = models.EmailField(unique=True)
-    gender = models.CharField(max_length=13, choices=GENDER_CHOICES, blank=True, null=True, default='Not Specified')
+    gender = models.CharField(max_length=13, choices=GENDER_CHOICES, blank=True, null=True)
 
     class Meta:
         ordering = ('username',)
@@ -26,6 +27,11 @@ class User(models.Model):
     def __str__(self):
         return f'{self.username}'
     
+@receiver(pre_save, sender=User)
+def set_value_not_specified (sender, instance, *args, **kwargs):
+    if instance.gender == '':
+        instance.gender = "Not Specified"
+        
 
 class UserGithub(models.Model):
     login = models.CharField(max_length=30,unique=True, validators=[MinLengthValidator(5)])
