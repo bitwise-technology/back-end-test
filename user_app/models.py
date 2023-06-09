@@ -14,7 +14,7 @@ class User(models.Model):
     username = models.CharField(max_length=30,unique=True, validators=[MinLengthValidator(5)])
     name = models.CharField(max_length=30,  validators=[MinLengthValidator(3)])
     last_name = models.CharField(max_length=30, validators=[MinLengthValidator(3)], null=True, blank=True)
-    profile_image_url = models.CharField(max_length=255, null=True, blank=True)
+    profile_image_url = models.URLField(max_length=255,null=True, blank=True)
     bio = models.CharField(max_length=30, validators=[MinLengthValidator(3)], null=True, blank=True)
     email = models.EmailField(unique=True)
     gender = models.CharField(max_length=13, choices=GENDER_CHOICES, blank=True, null=True)
@@ -36,7 +36,7 @@ def set_value_not_specified (sender, instance, *args, **kwargs):
 class UserGithub(models.Model):
     login = models.CharField(max_length=30,unique=True, validators=[MinLengthValidator(5)])
     name = models.CharField(max_length=40, null=True, blank=True)
-    avatar_url = models.CharField(max_length=255, null=True, blank=True)
+    avatar_url = models.URLField(max_length=255, null=True, blank=True)
     company = models.CharField(max_length=255, null=True, blank=True)
     blog = models.CharField(max_length=255, null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
