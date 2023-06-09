@@ -1,7 +1,9 @@
 from rest_framework import serializers
 from .models import User, UserGithub
+from django.core.exceptions import ValidationError
 import re
-from PIL import Image
+
+
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -29,15 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("The bio must contain only letters")
         return bio
     
-    def profile_image_url(self, profile_image_url):
-        if profile_image_url:
-            try:
-                image = Image.open(profile_image_url)
-                image.verify()
-            except Exception:
-                raise serializers.ValidationError("The profile must contain a valid picture.")
-        return profile_image_url
-
+    
 
 class UserCreateFromGithubSerializer(serializers.ModelSerializer):
 
