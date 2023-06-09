@@ -5,6 +5,7 @@ from django.core.validators import MinLengthValidator
 GENDER_CHOICES = (
     ('Male', 'Male'),
     ('Female', 'Female'),
+    ('Not Specified', 'Not Specified'),
 )
 
 
@@ -15,7 +16,7 @@ class User(models.Model):
     profile_image_url = models.CharField(max_length=255, null=True, blank=True)
     bio = models.CharField(max_length=30, validators=[MinLengthValidator(3)], null=True, blank=True)
     email = models.EmailField(unique=True)
-    gender = models.CharField(max_length=13, choices=GENDER_CHOICES, blank=True, null=True)
+    gender = models.CharField(max_length=13, choices=GENDER_CHOICES, blank=True, null=True, default='Not Specified')
 
     class Meta:
         ordering = ('username',)
@@ -25,10 +26,6 @@ class User(models.Model):
     def __str__(self):
         return f'{self.username}'
     
-    def save(self,*args, **kwargs):
-        if self.gender is None:
-            self.gender = "Not Specified"
-        super().save(*args, **kwargs)
 
 class UserGithub(models.Model):
     login = models.CharField(max_length=30,unique=True, validators=[MinLengthValidator(5)])
