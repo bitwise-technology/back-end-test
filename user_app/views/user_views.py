@@ -3,6 +3,7 @@ from rest_framework import generics, status
 from user_app.serializers import UserSerializer
 from rest_framework.response import Response
 import requests
+from rest_framework.exceptions import ValidationError
 
 # Create your views here.
 
@@ -10,16 +11,23 @@ class UserCreateView(generics.CreateAPIView):
     serializer_class = UserSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
 
-        response_data = {
-            'message': 'User saved successfully',
-            'user': serializer.data
-        }
+            response_data = {
+                'message': 'User saved successfully',
+                'user': serializer.data
+            }
 
-        return Response(response_data, status=status.HTTP_201_CREATED)
+            return Response(response_data, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
+            response_data = {
+                'response_status': f"HTTP {status.HTTP_400_BAD_REQUEST} bad request",
+                'response_message': serializer.errors
+            }
+            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
 class UserUpdateView(generics.RetrieveUpdateAPIView ):
     queryset = User.objects.all()
@@ -27,18 +35,27 @@ class UserUpdateView(generics.RetrieveUpdateAPIView ):
     lookup_field = 'id'
 
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
+        try:
+            partial = kwargs.pop('partial', False)
+            instance = self.get_object()
+            serializer = self.get_serializer(instance, data=request.data, partial=partial)
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
 
-        response_data = {
-            'message': 'User updated successfully',
-            'user': serializer.data
-        }
+            response_data = {
+                'response_status':f"HTTP {status.HTTP_200_OK} ok" ,
+                'message': 'User updated successfully',
+                'user': serializer.data
+            }
 
-        return Response(response_data, status=status.HTTP_200_OK)
+            return Response(response_data, status=status.HTTP_200_OK)
+        except ValidationError as e:
+            response_data = {
+                'response_status': f"HTTP {status.HTTP_400_BAD_REQUEST} bad request",
+                'response_message': serializer.errors
+            }
+            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
 
 class UserDetailByUsernameView(generics.RetrieveAPIView):
     queryset = User.objects.all()
