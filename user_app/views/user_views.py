@@ -31,6 +31,7 @@ class UserUpdateView(generics.RetrieveUpdateAPIView ):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
 
         response_data = {
             'message': 'User updated successfully',
