@@ -1,6 +1,6 @@
 # Bitwise - Desafio Backend
 
-Repositorio dedicado ao desafio da Bitwise.
+Repositório dedicado ao desafio da Bitwise.
 
 ### Como executar o projeto:
 
@@ -95,7 +95,7 @@ python
 
 ```
 
-### Consultar informaçoes de um usuário por email
+### Consultar informações de um usuário por email
 - ##### URL: http://127.0.0.1:8000/api/v1/user/detail/email/{email}/
 - ##### Método: GET
 - ##### Parâmetros de URL: email do usuário
@@ -112,7 +112,7 @@ python
     "gender": "Male"
 }
 ```
-### Consultar informaçoes de um usuário por username
+### Consultar informações de um usuário por username
 - ##### URL: http://127.0.0.1:8000/api/v1/user/detail/username/{username}/
 - ##### Método: GET
 - ##### Parâmetros de URL: username do usuário
@@ -132,7 +132,7 @@ python
 
 ```
 
-### Atualizando informaçoes de um usuário
+### Atualizando informações de um usuário
 - ##### URL: http://127.0.0.1:8000/api/v1/user/update/{id}/
 - ##### Método: PATCH/PUT
 - ##### Parâmetros de URL: id do usuário
@@ -219,7 +219,7 @@ python
   ```
 
 
-### Consultar informaçoes de um usuário por login
+### Consultar informações de um usuário por login
 - ##### URL: http://127.0.0.1:8000/api/v1/github_user/login/{login}/
 - ##### Método: GET
 - ##### Parâmetros de URL: email do usuário
