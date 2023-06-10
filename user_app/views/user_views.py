@@ -43,7 +43,6 @@ class UserUpdateView(generics.RetrieveUpdateAPIView ):
             self.perform_update(serializer)
 
             response_data = {
-                'response_status':f"HTTP {status.HTTP_200_OK} ok" ,
                 'message': 'User updated successfully',
                 'user': serializer.data
             }
