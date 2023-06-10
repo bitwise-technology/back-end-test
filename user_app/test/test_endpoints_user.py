@@ -150,3 +150,18 @@ class UserCreateViewTest(APITestCase):
         self.assertEqual(response.data['followers'], github_response_data['followers'])
         self.assertEqual(response.data['following'], github_response_data['following'])
         self.assertEqual(response.data['github_profile_url'], github_response_data['html_url'])
+
+    def test_search_users_by_username(self):
+        url = reverse("user:user_search_view", kwargs={'username': self.user.username})
+        response = self.client.get(url)
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        expected_data = UserSerializer([self.user], many=True).data
+        self.assertEqual(response.data['results'], expected_data)
+
+    def test_search_users_by_username_with_no_results(self):
+        url = reverse("user:user_search_view", kwargs={'username': 'non_existent_username'})
+        response = self.client.get(url)
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
