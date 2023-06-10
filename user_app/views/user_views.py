@@ -3,6 +3,7 @@ from rest_framework import generics, status
 from user_app.serializers import UserSerializer
 from rest_framework.response import Response
 import requests
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.exceptions import ValidationError
 
 # Create your views here.
@@ -88,3 +89,10 @@ class UserDetailByEmailView(generics.RetrieveAPIView):
     lookup_field = 'email'
 
 
+class UserSearchView(generics.ListAPIView):
+    serializer_class = UserSerializer
+    pagination_class = LimitOffsetPagination
+
+    def get_queryset(self):
+        username = self.kwargs['username']
+        return User.objects.filter(username__icontains=username)
