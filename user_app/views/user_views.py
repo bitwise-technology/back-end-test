@@ -3,6 +3,7 @@ from rest_framework import generics, status
 from user_app.serializers import UserSerializer
 from rest_framework.response import Response
 import requests
+from django.shortcuts import get_object_or_404
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.exceptions import ValidationError
 
@@ -82,11 +83,22 @@ class UserDetailByUsernameView(generics.RetrieveAPIView):
             serializer_data.update(extra_data)
             return Response(serializer_data)
         return Response(serializer.data)
+    
+    def get_object(self):
+        queryset = self.get_queryset()
+        username = self.kwargs['username']
+        return get_object_or_404(queryset, username__iexact=username)
+    
 
 class UserDetailByEmailView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = 'email'
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        email = self.kwargs['email']
+        return get_object_or_404(queryset, email__iexact=email)
 
 
 class UserSearchView(generics.ListAPIView):

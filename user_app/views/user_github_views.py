@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from user_app.views.utils_views import get_suggested_usernames
 from rest_framework.pagination import LimitOffsetPagination
 from django.db import IntegrityError
-
+from django.shortcuts import get_object_or_404
 
 
 class UserCreateViewFromGithub(generics.CreateAPIView):
@@ -52,6 +52,11 @@ class UserGithubDetailByUsernameView(generics.RetrieveAPIView):
     queryset = UserGithub.objects.all()
     serializer_class = UserGithubViewSerializer
     lookup_field = 'login'
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        login = self.kwargs['login']
+        return get_object_or_404(queryset, login__iexact=login)
 
 class UserGithubUpdateView(generics.RetrieveUpdateAPIView ):
     queryset = UserGithub.objects.all()
