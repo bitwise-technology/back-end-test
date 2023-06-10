@@ -4,6 +4,7 @@ from user_app.serializers import UserCreateFromGithubSerializer,UserGithubViewSe
 from user_app.services.github_service import GitHubService
 from rest_framework.response import Response
 from user_app.views.utils_views import get_suggested_usernames
+from rest_framework.pagination import PageNumberPagination
 from django.db import IntegrityError
 
 
@@ -70,3 +71,11 @@ class UserGithubUpdateView(generics.RetrieveUpdateAPIView ):
         }
 
         return Response(response_data, status=status.HTTP_200_OK)
+
+class UserGithubSearchView(generics.ListAPIView):
+    serializer_class = UserGithubViewSerializer
+    pagination_class = PageNumberPagination
+
+    def get_queryset(self):
+        login = self.kwargs['login']
+        return UserGithub.objects.filter(login__icontains=login)
