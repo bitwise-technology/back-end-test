@@ -168,6 +168,36 @@ python
 
 
 ```
+
+
+### Buscar usuário por username
+- ##### URL: http://127.0.0.1:8000/api/v1/user/search/{username}/
+- ##### Método: GET
+- ##### Parâmetros de URL: username do usuário
+
+
+- ##### Response:
+```console
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 1,
+      "username": "Habby_Valle",
+      "name": "Renildo Rabi",
+      "last_name": "Vale Dos Santos",
+      "profile_image_url": "https://a.espncdn.com/i/teamlogos/soccer/500/819.png",
+      "bio": "Bio teste teste",
+      "email": "habbyvale@gmail.com",
+      "gender": "Male"
+    }
+  ]
+}
+
+
+```
 - Campos obrigátorios: Username, name e email
 ---
 ### Criar usuário com o github
@@ -283,4 +313,38 @@ python
     "following": 14
   }
 }
+```
+
+### Buscar usuário por username
+- ##### URL: http://127.0.0.1:8000/api/v1/user/search/{username}/
+- ##### Método: GET
+- ##### Parâmetros de URL: username do usuário
+
+
+- ##### Response:
+```console
+	
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 1,
+      "login": "Renildo15",
+      "name": "Renildo Rabi Vale Dos Santos",
+      "avatar_url": "https://avatars.githubusercontent.com/u/77634638?v=4",
+      "company": "Universidade Federal Do Rio Grande Do Norte",
+      "blog": "",
+      "location": "Jucurutu",
+      "email": "renildo@gmail.com",
+      "bio": "Atualmente no 7° período do curso de Sistemas de Informação da UFRN",
+      "public_repos": 66,
+      "followers": 14,
+      "following": 14
+    }
+  ]
+}
+
+
 ```
