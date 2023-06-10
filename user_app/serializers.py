@@ -40,12 +40,5 @@ class UserCreateFromGithubSerializer(serializers.ModelSerializer):
 class UserGithubViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserGithub
-        fields = ['login', 'name','avatar_url', 'company', 'blog', 'location', 'email', 'bio', 'public_repos', 'followers', 'following']
-
-
-    def validate_name(self, name):
-        if not re.match(r'^[A-Za-zÀ-ÿ\s]+$', name):
-            raise serializers.ValidationError("The name must contain only letters")
-
-        return name
+        fields = ['id','login', 'name','avatar_url', 'company', 'blog', 'location', 'email', 'bio', 'public_repos', 'followers', 'following']
     
