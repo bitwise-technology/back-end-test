@@ -22,9 +22,14 @@ python3 -m venv venv
 - Windows
 ```console
 cd venv/Scripts
-./activate (caso use o powershell)
-ou
-activate(caso use o cmd)
+```
+- caso use o powershell
+```console
+./activate 
+```
+- caso use o cmd
+```console
+activate
 ```
 - Linux ou macOS 
 ```console
@@ -50,11 +55,11 @@ python manage.py migrate
 ```console
 python manage.py runserver
 ```
-8. Acesse a URL do sistema: http://localhost:8000/
+8. Acesse a  documentação da api: http://localhost:8000/
 
 9. Execute os testes:
 ```console
-python
+python manage.py runserver
 ```
 
 ## API endpoints
@@ -316,7 +321,7 @@ python
 ```
 
 ### Buscar usuário por username
-- ##### URL: http://127.0.0.1:8000/api/v1/user/search/{username}/
+- ##### URL:http://127.0.0.1:8000/api/v1/github_user/search/{username}/
 - ##### Método: GET
 - ##### Parâmetros de URL: username do usuário
 
