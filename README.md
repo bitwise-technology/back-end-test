@@ -48,6 +48,7 @@ Copie e cole a variável SECRET_KEY que está  no .env.example para o seu .env. 
 python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
 ```
 Irá ser gerado um uma chave onde você poderá copiar e colar  como valor da SECRET_KEY no seu .env.
+
 6. Execute os migrações:
 ```console
 python manage.py makemigrations
