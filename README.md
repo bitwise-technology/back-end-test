@@ -13,7 +13,7 @@ git clone https://github.com/bitwise-technology/back-end-test.git
 ```console
 python -m venv venv
 ```
-- Linux ou macOS 
+- Linux ou macOS
 ```console
 python3 -m venv venv
 ```
@@ -25,13 +25,13 @@ cd venv/Scripts
 ```
 - caso use o powershell
 ```console
-./activate 
+./activate
 ```
 - caso use o cmd
 ```console
 activate
 ```
-- Linux ou macOS 
+- Linux ou macOS
 ```console
 source venv/bin/activate
 ```
@@ -63,7 +63,7 @@ python manage.py runserver
 
 9. Execute os testes:
 ```console
-python manage.py test
+pytest --cov=user_app
 ```
 
 ## API endpoints
@@ -332,7 +332,7 @@ python manage.py test
 
 - ##### Response:
 ```console
-	
+
 {
   "count": 1,
   "next": null,
