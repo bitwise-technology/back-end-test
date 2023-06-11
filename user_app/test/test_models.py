@@ -1,51 +1,75 @@
 from django.test import TestCase
+from faker import Faker
 
 from user_app.models import User, UserGithub
 
 
 class UserModelTest(TestCase):
+    def setUp(self):
+        self.faker = Faker()
+
     def test_create_user(self):
+        username = self.faker.user_name()
+        name = self.faker.first_name()
+        last_name = self.faker.last_name()
+        profile_image_url = ""
+        bio = ""
+        email = self.faker.email()
+        gender = self.faker.random_element(["Male", "Female"])
+
         user = User.objects.create(
-            username="testuser",
-            name="Test User",
-            last_name="Last Name",
-            profile_image_url="https://example.com/profile.jpg",
-            bio="User bio",
-            email="test@example.com",
-            gender="Male",
+            username=username,
+            name=name,
+            last_name=last_name,
+            profile_image_url=profile_image_url,
+            bio=bio,
+            email=email,
+            gender=gender,
         )
 
-        self.assertEqual(user.username, "testuser")
-        self.assertEqual(user.name, "Test User")
-        self.assertEqual(user.last_name, "Last Name")
-        self.assertEqual(user.profile_image_url, "https://example.com/profile.jpg")
-        self.assertEqual(user.bio, "User bio")
-        self.assertEqual(user.email, "test@example.com")
-        self.assertEqual(user.gender, "Male")
+        self.assertEqual(user.username, username)
+        self.assertEqual(user.name, name)
+        self.assertEqual(user.last_name, last_name)
+        self.assertEqual(user.profile_image_url, profile_image_url)
+        self.assertEqual(user.bio, bio)
+        self.assertEqual(user.email, email)
+        self.assertEqual(user.gender, gender)
 
     def test_create_user_github(self):
+        login = self.faker.user_name()
+        name = self.faker.first_name()
+        avatar_url = ""
+        company = ""
+        blog = ""
+        location = ""
+        email = ""
+        bio = self.faker.text()
+        public_repos = self.faker.random_int(min=1, max=100)
+        followers = self.faker.random_int(min=1, max=100)
+        following = self.faker.random_int(min=1, max=100)
+
         user_github = UserGithub.objects.create(
-            login="username_test",
-            name="Test User",
-            avatar_url="https://example.com/avatar.jpg",
-            company="Company",
-            blog="https://example.com/blog",
-            location="Location",
-            email="test@example.com",
-            bio="User bio",
-            public_repos=10,
-            followers=20,
-            following=30,
+            login=login,
+            name=name,
+            avatar_url=avatar_url,
+            company=company,
+            blog=blog,
+            location=location,
+            email=email,
+            bio=bio,
+            public_repos=public_repos,
+            followers=followers,
+            following=following,
         )
 
-        self.assertEqual(user_github.login, "username_test")
-        self.assertEqual(user_github.name, "Test User")
-        self.assertEqual(user_github.avatar_url, "https://example.com/avatar.jpg")
-        self.assertEqual(user_github.company, "Company")
-        self.assertEqual(user_github.blog, "https://example.com/blog")
-        self.assertEqual(user_github.location, "Location")
-        self.assertEqual(user_github.email, "test@example.com")
-        self.assertEqual(user_github.bio, "User bio")
-        self.assertEqual(user_github.public_repos, 10)
-        self.assertEqual(user_github.followers, 20)
-        self.assertEqual(user_github.following, 30)
+        self.assertEqual(user_github.login, login)
+        self.assertEqual(user_github.name, name)
+        self.assertEqual(user_github.avatar_url, avatar_url)
+        self.assertEqual(user_github.company, company)
+        self.assertEqual(user_github.blog, blog)
+        self.assertEqual(user_github.location, location)
+        self.assertEqual(user_github.email, email)
+        self.assertEqual(user_github.bio, bio)
+        self.assertEqual(user_github.public_repos, public_repos)
+        self.assertEqual(user_github.followers, followers)
+        self.assertEqual(user_github.following, following)

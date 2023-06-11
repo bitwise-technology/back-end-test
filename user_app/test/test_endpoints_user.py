@@ -1,6 +1,7 @@
 from unittest import mock
 
 from django.urls import reverse
+from faker import Faker
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -10,27 +11,28 @@ from user_app.serializers import UserSerializer
 
 class UserCreateViewTest(APITestCase):
     def setUp(self):
+        self.faker = Faker()
         self.user = User.objects.create(
-            username="username_teste",
-            name="teste",
-            last_name="test",
+            username=self.faker.user_name(),
+            name=self.faker.first_name(),
+            last_name=self.faker.last_name(),
             profile_image_url="",
             bio="",
-            email="teste@example.com",
-            gender="Male",
+            email=self.faker.email(),
+            gender=self.faker.random_element(["Male", "Female"]),
         )
 
     def test_success_create_user(self):
         url = reverse("user:user_create_view")
 
         data = {
-            "username": "user_teste",
-            "name": "Teste",
-            "last_name": "One",
+            "username": self.faker.user_name(),
+            "name": self.faker.first_name(),
+            "last_name": self.faker.last_name(),
             "profile_image_url": "",
             "bio": "",
-            "email": "testeone@example.com",
-            "gender": "",
+            "email": self.faker.email(),
+            "gender": self.faker.random_element(["Male", "Female"]),
         }
 
         response = self.client.post(url, data, format="json")
@@ -38,7 +40,7 @@ class UserCreateViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["message"], "User saved successfully")
 
-        user = User.objects.get(username="user_teste")
+        user = User.objects.get(username=data["username"])
         serializer = UserSerializer(user)
         self.assertEqual(response.data["user"], serializer.data)
 
@@ -47,11 +49,11 @@ class UserCreateViewTest(APITestCase):
 
         data = {
             "username": "",
-            "name": "Teste",
-            "last_name": "One",
+            "name": self.faker.first_name(),
+            "last_name": self.faker.last_name(),
             "profile_image_url": "",
             "bio": "",
-            "email": "testeone@example.com",
+            "email": self.faker.email(),
             "gender": "",
         }
 
@@ -63,32 +65,32 @@ class UserCreateViewTest(APITestCase):
         url = reverse("user:user_update_view", kwargs={"id": self.user.id})
 
         data = {
-            "username": "newusername",
-            "name": "Teste",
-            "last_name": "One",
+            "username": self.faker.user_name(),
+            "name": self.faker.first_name(),
+            "last_name": self.faker.last_name(),
             "profile_image_url": "",
             "bio": "",
-            "email": "testeone@example.com",
-            "gender": "Male",
+            "email": self.faker.email(),
+            "gender": self.faker.random_element(["Male", "Female"]),
         }
 
         response = self.client.put(url, data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["message"], "User updated successfully")
-        self.assertEqual(response.data["user"]["username"], "newusername")
+        self.assertEqual(response.data["user"]["username"], data["username"])
 
     def test_failed_update_user(self):
         url = reverse("user:user_update_view", kwargs={"id": self.user.id})
 
         data = {
             "username": "",
-            "name": "Teste",
-            "last_name": "One",
+            "name": self.faker.first_name(),
+            "last_name": self.faker.last_name(),
             "profile_image_url": "",
             "bio": "",
-            "email": "testeone@example.com",
-            "gender": "Male",
+            "email": self.faker.email(),
+            "gender": self.faker.random_element(["Male", "Female"]),
         }
 
         response = self.client.put(url, data, format="json")

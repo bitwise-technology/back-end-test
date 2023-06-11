@@ -2,26 +2,30 @@ from unittest import mock
 
 import requests
 from django.test import TestCase
+from faker import Faker
 
 from user_app.models import UserGithub
 from user_app.services.github_service import GitHubService
 
 
 class GitHubServiceTestCase(TestCase):
+    def setUp(self):
+        self.faker = Faker()
+
     @mock.patch("requests.get")
     def test_get_github_data_success(self, mock_get):
         response_json = {
-            "login": "username_teste",
-            "name": "Name Test",
-            "avatar_url": "https://example.com/avatar.jpg",
-            "company": "Company Test",
-            "blog": "https://example.com/blog",
-            "location": "Location Test",
-            "email": "test@example.com",
-            "bio": "Bio Test",
-            "public_repos": 10,
-            "followers": 20,
-            "following": 30,
+            "login": self.faker.user_name(),
+            "name": self.faker.first_name(),
+            "avatar_url": self.faker.image_url(),
+            "company": self.faker.company(),
+            "blog": self.faker.url(),
+            "location": self.faker.city(),
+            "email": self.faker.email(),
+            "bio": self.faker.text(),
+            "public_repos": self.faker.random_int(min=1, max=100),
+            "followers": self.faker.random_int(min=1, max=100),
+            "following": self.faker.random_int(min=1, max=100),
         }
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = response_json
@@ -40,47 +44,47 @@ class GitHubServiceTestCase(TestCase):
 
     def test_create_user_from_github_api(self):
         github_data = {
-            "login": "username_teste",
-            "name": "Name Test",
-            "avatar_url": "https://example.com/avatar.jpg",
-            "company": "Company Test",
-            "blog": "https://example.com/blog",
-            "location": "Location Test",
-            "email": "test@example.com",
-            "bio": "Bio Test",
-            "public_repos": 10,
-            "followers": 20,
-            "following": 30,
+            "login": self.faker.user_name(),
+            "name": self.faker.first_name(),
+            "avatar_url": self.faker.image_url(),
+            "company": self.faker.company(),
+            "blog": self.faker.url(),
+            "location": self.faker.city(),
+            "email": self.faker.email(),
+            "bio": self.faker.text(),
+            "public_repos": self.faker.random_int(min=1, max=100),
+            "followers": self.faker.random_int(min=1, max=100),
+            "following": self.faker.random_int(min=1, max=100),
         }
 
         user = GitHubService.create_user_from_github_api(github_data)
 
         self.assertIsInstance(user, UserGithub)
-        self.assertEqual(user.login, "username_teste")
-        self.assertEqual(user.name, "Name Test")
-        self.assertEqual(user.avatar_url, "https://example.com/avatar.jpg")
-        self.assertEqual(user.company, "Company Test")
-        self.assertEqual(user.blog, "https://example.com/blog")
-        self.assertEqual(user.location, "Location Test")
-        self.assertEqual(user.email, "test@example.com")
-        self.assertEqual(user.bio, "Bio Test")
-        self.assertEqual(user.public_repos, 10)
-        self.assertEqual(user.followers, 20)
-        self.assertEqual(user.following, 30)
+        self.assertEqual(user.login, github_data["login"])
+        self.assertEqual(user.name, github_data["name"])
+        self.assertEqual(user.avatar_url, github_data["avatar_url"])
+        self.assertEqual(user.company, github_data["company"])
+        self.assertEqual(user.blog, github_data["blog"])
+        self.assertEqual(user.location, github_data["location"])
+        self.assertEqual(user.email, github_data["email"])
+        self.assertEqual(user.bio, github_data["bio"])
+        self.assertEqual(user.public_repos, github_data["public_repos"])
+        self.assertEqual(user.followers, github_data["followers"])
+        self.assertEqual(user.following, github_data["following"])
 
     def test_response_data_user(self):
         user = UserGithub(
-            login="username_teste",
-            name="Name Test",
-            avatar_url="https://example.com/avatar.jpg",
-            company="Company Test",
-            blog="https://example.com/blog",
-            location="Location Test",
-            email="test@example.com",
-            bio="Bio Test",
-            public_repos=10,
-            followers=20,
-            following=30,
+            login=self.faker.user_name(),
+            name=self.faker.first_name(),
+            avatar_url=self.faker.image_url(),
+            company=self.faker.company(),
+            blog=self.faker.url(),
+            location=self.faker.city(),
+            email=self.faker.email(),
+            bio=self.faker.text(),
+            public_repos=self.faker.random_int(min=1, max=100),
+            followers=self.faker.random_int(min=1, max=100),
+            following=self.faker.random_int(min=1, max=100),
         )
         response_data = GitHubService.response_data_user(user)
 
@@ -88,17 +92,17 @@ class GitHubServiceTestCase(TestCase):
             "message": "User saved successfully",
             "user": {
                 "id": user.id,
-                "login": "username_teste",
-                "name": "Name Test",
-                "avatar_url": "https://example.com/avatar.jpg",
-                "company": "Company Test",
-                "blog": "https://example.com/blog",
-                "location": "Location Test",
-                "email": "test@example.com",
-                "bio": "Bio Test",
-                "public_repos": 10,
-                "followers": 20,
-                "following": 30,
+                "login": user.login,
+                "name": user.name,
+                "avatar_url": user.avatar_url,
+                "company": user.company,
+                "blog": user.blog,
+                "location": user.location,
+                "email": user.email,
+                "bio": user.bio,
+                "public_repos": user.public_repos,
+                "followers": user.followers,
+                "following": user.following,
             },
         }
         self.assertEqual(response_data, expected_response_data)

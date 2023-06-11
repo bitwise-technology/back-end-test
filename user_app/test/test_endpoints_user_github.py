@@ -1,4 +1,5 @@
 from django.urls import reverse
+from faker import Faker
 from rest_framework import status
 from rest_framework.test import APIRequestFactory, APITestCase
 
@@ -8,19 +9,20 @@ from user_app.serializers import UserGithubViewSerializer
 
 class UserCreateViewFromGithubTest(APITestCase):
     def setUp(self):
+        self.faker = Faker()
         self.factory = APIRequestFactory()
         self.user = UserGithub.objects.create(
-            login="username_teste",
-            name="name teste",
+            login=self.faker.user_name(),
+            name=self.faker.first_name(),
             avatar_url="",
             company="",
             blog="",
             location="",
             email="",
-            bio="teste teste",
-            public_repos=80,
-            followers=10,
-            following=10,
+            bio=self.faker.text(),
+            public_repos=self.faker.random_int(min=1, max=100),
+            followers=self.faker.random_int(min=1, max=100),
+            following=self.faker.random_int(min=1, max=100),
         )
 
     def test_get_user_github_by_username(self):
@@ -37,41 +39,41 @@ class UserCreateViewFromGithubTest(APITestCase):
         url = reverse("user:user_github_update_view", kwargs={"id": self.user.id})
 
         data = {
-            "login": "newusername",
-            "name": "new name",
+            "login": self.faker.user_name(),
+            "name": self.faker.first_name(),
             "avatar_url": "",
             "company": "",
             "blog": "",
             "location": "",
             "email": "",
-            "bio": "teste teste",
-            "public_repos": 80,
-            "followers": 20,
-            "following": 30,
+            "bio": self.faker.text(),
+            "public_repos": self.faker.random_int(min=1, max=100),
+            "followers": self.faker.random_int(min=1, max=100),
+            "following": self.faker.random_int(min=1, max=100),
         }
 
         response = self.client.put(url, data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["message"], "User updated successfully")
-        self.assertEqual(response.data["user"]["login"], "newusername")
-        self.assertEqual(response.data["user"]["name"], "new name")
+        self.assertEqual(response.data["user"]["login"], data["login"])
+        self.assertEqual(response.data["user"]["name"], data["name"])
 
     def test_failed_update_user(self):
         url = reverse("user:user_github_update_view", kwargs={"id": self.user.id})
 
         data = {
             "login": "",
-            "name": "new name",
+            "name": self.faker.first_name(),
             "avatar_url": "",
             "company": "",
             "blog": "",
             "location": "",
             "email": "",
-            "bio": "teste teste",
-            "public_repos": 80,
-            "followers": 20,
-            "following": 30,
+            "bio": self.faker.text(),
+            "public_repos": self.faker.random_int(min=1, max=100),
+            "followers": self.faker.random_int(min=1, max=100),
+            "following": self.faker.random_int(min=1, max=100),
         }
 
         response = self.client.put(url, data, format="json")
@@ -80,9 +82,7 @@ class UserCreateViewFromGithubTest(APITestCase):
         self.assertIn("login", response.data)
 
     def test_search_users_by_username(self):
-        url = reverse(
-            "user:user_github_search_view", kwargs={"login": "username_teste"}
-        )
+        url = reverse("user:user_github_search_view", kwargs={"login": self.user.login})
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)

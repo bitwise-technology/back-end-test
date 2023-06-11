@@ -1,16 +1,20 @@
 from unittest import mock
 
 from django.test import TestCase
+from faker import Faker
 
 from user_app.views.utils_views import get_suggested_usernames
 
 
 class UtilsViewsTestCase(TestCase):
+    def setUp(self):
+        self.faker = Faker()
+
     @mock.patch("requests.get")
     def test_get_suggested_usernames(self, mock_get):
         response_json = [
-            {"login": "user1"},
-            {"login": "user2"},
+            {"login": self.faker.user_name(),},
+            {"login": self.faker.user_name(),},
         ]
 
         mock_response = mock.Mock()
