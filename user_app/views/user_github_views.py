@@ -1,12 +1,14 @@
-from user_app.models import UserGithub
-from rest_framework import generics, status
-from user_app.serializers import UserCreateFromGithubSerializer,UserGithubViewSerializer
-from user_app.services.github_service import GitHubService
-from rest_framework.response import Response
-from user_app.views.utils_views import get_suggested_usernames
-from rest_framework.pagination import LimitOffsetPagination
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
+from rest_framework import generics, status
+from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.response import Response
+
+from user_app.models import UserGithub
+from user_app.serializers import (UserCreateFromGithubSerializer,
+                                  UserGithubViewSerializer)
+from user_app.services.github_service import GitHubService
+from user_app.views.utils_views import get_suggested_usernames
 
 
 class UserCreateViewFromGithub(generics.CreateAPIView):
@@ -21,7 +23,7 @@ class UserCreateViewFromGithub(generics.CreateAPIView):
         if not github_username:
             return Response(
                 {
-                    "response_status": f"{status.HTTP_400_BAD_REQUEST} Bad request",
+                    'response_status': f'{status.HTTP_400_BAD_REQUEST} Bad request',
                     'response_messege': f'Missing required field: login'
                 }, 
                 status=status.HTTP_400_BAD_REQUEST
