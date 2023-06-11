@@ -1,9 +1,10 @@
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
-from user_app.models import UserGithub 
-from rest_framework.test import APIRequestFactory
+from rest_framework.test import APIRequestFactory, APITestCase
+
+from user_app.models import UserGithub
 from user_app.serializers import UserGithubViewSerializer
+
 
 class UserCreateViewFromGithubTest(APITestCase):
     def setUp(self):

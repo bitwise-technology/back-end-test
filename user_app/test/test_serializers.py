@@ -1,5 +1,8 @@
 from django.test import TestCase
-from user_app.serializers import UserSerializer, UserGithubViewSerializer, UserCreateFromGithubSerializer
+
+from user_app.serializers import (UserCreateFromGithubSerializer,
+                                  UserGithubViewSerializer, UserSerializer)
+
 
 class UserSerializerTest(TestCase):
 

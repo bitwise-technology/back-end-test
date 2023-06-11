@@ -1,9 +1,12 @@
+from unittest import mock
+
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from user_app.models import User 
+
+from user_app.models import User
 from user_app.serializers import UserSerializer
-from unittest import mock
+
 
 class UserCreateViewTest(APITestCase):
     def setUp(self):

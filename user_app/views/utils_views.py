@@ -1,5 +1,8 @@
 import random
+
 import requests
+
+
 def get_suggested_usernames():
 
     github_api = 'https://api.github.com/users'

@@ -1,11 +1,12 @@
-from user_app.models import User
-from rest_framework import generics, status
-from user_app.serializers import UserSerializer
-from rest_framework.response import Response
 import requests
 from django.shortcuts import get_object_or_404
-from rest_framework.pagination import LimitOffsetPagination
+from rest_framework import generics, status
 from rest_framework.exceptions import ValidationError
+from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.response import Response
+
+from user_app.models import User
+from user_app.serializers import UserSerializer
 
 # Create your views here.
 

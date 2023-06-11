@@ -1,4 +1,5 @@
 from django.test import TestCase
+
 from user_app.models import User, UserGithub
 
 

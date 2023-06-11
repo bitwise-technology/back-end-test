@@ -1,8 +1,11 @@
-import requests
 from unittest import mock
+
+import requests
 from django.test import TestCase
+
 from user_app.models import UserGithub
 from user_app.services.github_service import GitHubService
+
 
 class GitHubServiceTestCase(TestCase):
     @mock.patch('requests.get')
