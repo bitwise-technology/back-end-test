@@ -5,10 +5,8 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
 
 from user_app.models import UserGithub
-from user_app.serializers import (
-    UserCreateFromGithubSerializer,
-    UserGithubViewSerializer,
-)
+from user_app.serializers import (UserCreateFromGithubSerializer,
+                                  UserGithubViewSerializer)
 from user_app.services.github_service import GitHubService
 from user_app.views.utils_views import get_suggested_usernames
 
