@@ -1,5 +1,5 @@
-from django.db import models
 from django.core.validators import MinLengthValidator
+from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
@@ -7,6 +7,7 @@ from django.dispatch import receiver
 GENDER_CHOICES = (
     ('Male', 'Male'),
     ('Female', 'Female'),
+    ('Not Specified','Not Specified')
 )
 
 
@@ -30,7 +31,7 @@ class User(models.Model):
 @receiver(pre_save, sender=User)
 def set_value_not_specified (sender, instance, *args, **kwargs):
     if instance.gender == '':
-        instance.gender = "Not Specified"
+        instance.gender = 'Not Specified'
         
 
 class UserGithub(models.Model):
