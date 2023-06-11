@@ -62,7 +62,7 @@ python manage.py runserver
 
 9. Execute os testes:
 ```console
-python manage.py runserver
+python manage.py test
 ```
 
 ## API endpoints
