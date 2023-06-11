@@ -29,3 +29,4 @@ black==23.3.0
 pytest==7.3.2
 pytest-cov==4.1.0
 pytest-django==4.5.2
+Faker==18.10.1
