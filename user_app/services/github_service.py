@@ -1,6 +1,8 @@
-from user_app.models import UserGithub
+from http import HTTPStatus
+
 import requests
-import random
+
+from user_app.models import UserGithub
 
 URL_API_GITHUB = 'https://api.github.com/users/'
 
@@ -12,7 +14,7 @@ class GitHubService():
         try:
             response = requests.get(github_api)
 
-            if response.status_code == 200:
+            if response.status_code == HTTPStatus.OK:
                 return response.json()
             else:
                 return None
