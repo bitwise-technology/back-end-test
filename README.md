@@ -10,13 +10,13 @@ Buscamos pessoas que gostem de aprender, que não tenham medo de falhar e que n�
 
 ## Instruções para participar
 
-- Crie sua conta no github, caso você não tenha uma.
-- Crie um novo fork do repositório do desafio.
-- Crie uma nova branch com seu `nome-sobrenome`.
-- Faça um pull request para o nosso repositório quando você terminar o desafio.
-- Envie um email para douglas@bitwise.ltda para te adicionarmos ao time slack do desafio.
-- Adicione no README.md como devemos realizar o setup do servidor ou crie um script setup.sh para rodarmos e subirmos o ambiente local host.
-- Adicione um arquivo com todas as chamadas para seus endpoints, com CURL ou usando o Postman.
+- Crie sua conta no github, caso você não tenha uma
+- Crie um novo fork do repositório do desafio
+- Crie uma nova branch com seu `nome-sobrenome`
+- Faça um pull request para o nosso repositório quando você terminar o desafio
+- Envie um e-mail para `douglas@bitwisespace.com`
+- Adicione no README.md como devemos realizar o setup do servidor ou crie um script setup.sh para rodarmos e subirmos o ambiente local host
+- Adicione um arquivo com todas as chamadas para seus endpoints, com CURL ou usando o Insomnia/Postman
 
 ## O nosso desafio
 
@@ -27,13 +27,13 @@ Basicamente você tem a responsabilidade de criar uma CRUD Restful API integrand
 - Realizar cadastro do usuário
   - Crie um ou mais endpoints para realizar o cadastro do usuário com as informações da entidade abaixo. (Obs: esse endpoint irá criar o usuário no banco de dados sem ter integração com o github)
 - Realizar cadastro do usuário usando as informações disponíveis no Github
-  - Crie um endpoint pelo qual o usuário possa criar uma conta passando somente o username do github
-  - Se username for valido, cadastrar o usuário com as informações do Github ( Os dados devem ser mapeados da API do Github para sua API )
+  - Crie um endpoint pelo qual o usuário possa criar uma conta passando somente o username do github.
+  - Se username for valido, cadastrar o usuário com as informações do Github. ( Os dados devem ser mapeados da API do Github para sua API )
   - Se username não for encontrado, retornar uma lista de sugestões de nomes de usuário.
 - Realizar update das informações do usuário
-  - Crie um ou mais endpoints para atualizar as informações do usuário
-- Consultar informações de um determinado usuário por email ou username
-  - Crie um ou mais endpoints para consultar as informações cadastradas no bando de dados
+  - Crie um ou mais endpoints para atualizar as informações do usuário.
+- Consultar informações de um determinado usuário por e-mail ou username
+  - Crie um ou mais endpoints para consultar as informações cadastradas no bando de dados.
   - Ao consultar o perfil do usuário cadastrado, realizar consulta na api do github e adicionar as seguinte informações caso o usuário possua uma conta: Quantidade de Followers, Quantidade de Following, Quantidade de repositórios públicos, URL publica para o profile desse usuário no Github.
 
 ```
@@ -65,7 +65,7 @@ Definição da Entidade:
 
 - email
   - Único na base de dados
-  - Usar validação de email padrão
+  - Usar validação de e-mail padrão
 
 - gender
   - Opcional
@@ -82,13 +82,13 @@ Você pode usar qualquer tipo de tecnologia para entregar o projeto como: NodeJS
 
 Caso você consiga completar todas tarefas acima e queira nós mostrar que você manja:
 
-- Adicione um endpoint de busca por nome de usuário com paginação
+- Adicione um endpoint de busca por nome de usuário com paginação.
 
 ## O que iremos avaliar?
 
 - Adaptação a novos tipos de tecnologias
 - Coesão das mensagens dos commits
-- Testes automatizados como (Unit Test, UI Test ...)
+- Testes automatizados como (Unit Test, UI Test, ...)
 - Estrutura do projeto
 - Nomenclatura de classes, funções e métodos
 - Aplicação de Design Patterns
