@@ -1,9 +1,64 @@
 # Bitwise - Desafio Backend
 
 Repositório dedicado ao desafio da Bitwise.
+##  Executando o Projeto com Docker Compose
+Este é um guia para executar o projeto usando o Docker Compose. O Docker Compose permite criar e executar o ambiente de desenvolvimento com todas as dependências do projeto de forma fácil e automatizada. Aqui estou usando o Postgres como banco de dados.
 
-### Como executar o projeto:
 
+1. Crie um arquivo chamado .env na raiz do projeto e cole o conteúdo do .env.example:
+```console
+
+SECRET_KEY=""
+NAME='nome_db'
+USER='user_db'
+PASSWORD='password_db'
+HOST='host'
+PORT=0000
+
+```
+Certifique-se de preencher corretamente os valores para cada variável de ambiente de acordo com as configurações do seu ambiente.
+
+2. Crie um arquivo chamado .env.docker na raiz do projeto e cole o conteúdo do .env.docker.example:
+```console
+
+SECRET_KEY=""
+NAME='nome_db'
+USER='user_db'
+PASSWORD='password_db'
+HOST='host'
+PORT=0000
+
+POSTGRES_PASSWORD=postgres_password
+POSTGRES_USER=postgres_user
+POSTGRES_DB=postgres_db
+
+
+PGADMIN_DEFAULT_EMAIL=pgadmin_email
+PGADMIN_DEFAULT_PASSWORD=pgadmin_password
+
+```
+
+  Da mesma forma, preencha as variáveis de ambiente com os valores corretos para o ambiente em que você está executando o projeto.
+
+  Certifique-se de revisar e ajustar todas as variáveis de ambiente nos arquivos .env e .env.docker de acordo com a configuração do seu ambiente, como o nome do banco de dados, usuário, senha, host, porta, etc.
+
+3. No terminal, navegue até o diretório do projeto onde o arquivo docker-compose.yml está localizado.
+
+4. Execute o comando a seguir para construir as imagens e iniciar os contêineres:
+```console
+
+docker-compose up -d
+```
+
+5. Após a inicialização bem-sucedida dos contêineres, você poderá acessar o projeto em seu navegador usando o seguinte endereço:
+
+```console
+
+http://127.0.0.1:8000/
+```
+---
+## Como executar o projeto sem docker compose:
+Esse passo a passo é para caso você deseje executar o projeto sem usar o docker compose. Para isso, comente o database configurado com o postgres e descomente o database que usa o sqlite. Por padrão o projeto está configurado com o Postgres.
 1. Faça o git clone desse repositorio:
 ```console
 git clone https://github.com/bitwise-technology/back-end-test.git
@@ -42,7 +97,7 @@ pip install -r requirements.txt
 ```
 
 5. Criar arquivo .env:
-Copie e cole a variável SECRET_KEY que está  no .env.example para o seu .env. Em seguida, no seu terminal execute o seguinte comando:
+Nesse caso só será necessário a SECRET_KEY. Copie e cole a variável SECRET_KEY que está em .env.example para o seu .env. Em seguida, no seu terminal execute o seguinte comando para criar:
 
 ```console
 python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
@@ -357,3 +412,4 @@ pytest --cov=user_app
 
 
 ```
+
