@@ -7,33 +7,29 @@ services:
     restart: always
     user: postgres
     volumes:
-      - pgdata_volume:/var/lib/postgresql/data
-      - .env.docker:/app/.env
-    environment:
-      - LC_ALL=C.UTF-8
-      - POSTGRES_PASSWORD=POSTGRES_PASSWORD
-      - POSTGRES_USER=POSTGRES_USER
-      - POSTGRES_DB=POSTGRES_DB
+      - pgdata_two:/var/lib/postgresql/data
+      - ./:/app/
+    env_file:
+      - ./.env.docker
     ports:
       - 5431:5432
     networks:
-      - my-network
+      - network
 
   pgadmin:
     container_name: bitwise_pgadmin
     image: dpage/pgadmin4
     restart: unless-stopped
     volumes:
-      - pgadmin_volume:/var/lib/pgadmin
-      - .env.docker:/app/.env
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=PGADMIN_DEFAULT_EMAIL
-      - PGADMIN_DEFAULT_PASSWORD=PGADMIN_DEFAULT_PASSWORD
-      - PGADMIN_CONFIG_SERVER_MODE = PGADMIN_CONFIG_SERVER_MODE
+      - pgadmin_two:/var/lib/pgadmin
+      - ./:/app/
+    env_file:
+      - ./.env.docker
     ports:
       - 5051:80
     networks:
-      - my-network
+      - network
+
   app:
     build:
       context: .
@@ -44,14 +40,13 @@ services:
     expose:
       - '8000'
     volumes:
-      - .env.docker:/app/.env
-      - .env:/app/.env
-    environment:
-      - SECRET_KEY=SECRET_KEY
+      - ./:/app/
+    env_file:
+      - ./.env.docker
     depends_on:
       - db
     networks:
-      - my-network
+      - network
     ports:
       - '8000:8000'
 
@@ -66,11 +61,11 @@ services:
     depends_on:
       - app
     networks:
-      - my-network
+      - network
 
 volumes:
-  pgdata_volume:
-  pgadmin_volume:
+  pgdata_two:
+  pgadmin_two:
 
 networks:
-  my-network:
+  network:
