@@ -7,7 +7,7 @@ services:
     restart: always
     user: postgres
     volumes:
-      - pgdata_two:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
       - ./:/app/
     env_file:
       - ./.env.docker
@@ -21,7 +21,7 @@ services:
     image: dpage/pgadmin4
     restart: unless-stopped
     volumes:
-      - pgadmin_two:/var/lib/pgadmin
+      - pgadmin:/var/lib/pgadmin
       - ./:/app/
     env_file:
       - ./.env.docker
@@ -64,8 +64,8 @@ services:
       - network
 
 volumes:
-  pgdata_two:
-  pgadmin_two:
+  pgdata:
+  pgadmin:
 
 networks:
   network:
