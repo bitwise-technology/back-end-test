@@ -99,9 +99,10 @@ python manage.py collectstatic
 docker compose up -d
 ```
 
-9. Executando as migrates:
+9. Executando as migrations e migrates:
 ```console
 docker container ls
+docker container exec -it bitwise_app python manage.py makemigrations
 docker container exec -it bitwise_app python manage.py migrate
 ```
 10. Rodando os testes:
