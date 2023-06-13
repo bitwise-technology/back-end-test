@@ -13,8 +13,12 @@ class UtilsViewsTestCase(TestCase):
     @mock.patch("requests.get")
     def test_get_suggested_usernames(self, mock_get):
         response_json = [
-            {"login": self.faker.user_name(),},
-            {"login": self.faker.user_name(),},
+            {
+                "login": self.faker.user_name(),
+            },
+            {
+                "login": self.faker.user_name(),
+            },
         ]
 
         mock_response = mock.Mock()
