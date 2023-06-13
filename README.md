@@ -4,37 +4,83 @@ Repositório dedicado ao desafio da Bitwise.
 ##  Executando o Projeto com Docker Compose
 Este é um guia para executar o projeto usando o Docker Compose. O Docker Compose permite criar e executar o ambiente de desenvolvimento com todas as dependências do projeto de forma fácil e automatizada. Aqui estou usando o Postgres como banco de dados.
 
+1. Faça o git clone desse repositorio:
+```console
+git clone https://github.com/bitwise-technology/back-end-test.git
+```
+2. Criar ambiente virtual:
+- Windows
+```console
+python -m venv venv
+```
+- Linux ou macOS
+```console
+python3 -m venv venv
+```
 
-1. Crie um arquivo chamado .env na raiz do projeto e cole o conteúdo do .env.example:
+3. Ativar ambiente virtual:
+- Windows
+```console
+cd venv/Scripts
+```
+- caso use o powershell
+```console
+./activate
+```
+- caso use o cmd
+```console
+activate
+```
+- Linux ou macOS
+```console
+source venv/bin/activate
+```
+
+4. Instale as dependências:
+```console
+pip install -r requirements.txt
+```
+Caso tenja algum problema na instalação das dependencias, execute o comando abaixo.
+```console
+pip install -r requirements.txt --use-pep517
+```
+
+5. Criar arquivo .env:
+Nesse caso só será necessário a SECRET_KEY. Copie e cole a variável SECRET_KEY que está em .env.example para o seu .env. Em seguida, no seu terminal execute o seguinte comando para criar:
+
+```console
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
+Irá ser gerado um uma chave onde você poderá copiar e colar  como valor da SECRET_KEY no seu .env.
+6. Crie um arquivo chamado .env na raiz do projeto e cole o conteúdo do .env.example:
 ```console
 
-SECRET_KEY=""
-NAME='nome_db'
-USER='user_db'
-PASSWORD='password_db'
-HOST='host'
-PORT=0000
+SECRET_KEY=
+POSTGRES_DB= ''
+POSTGRES_USER= ''
+POSTGRES_PASSWORD= ''
+DB_HOST= ''
+DB_PORT=
 
 ```
 Certifique-se de preencher corretamente os valores para cada variável de ambiente de acordo com as configurações do seu ambiente.
 
-2. Crie um arquivo chamado .env.docker na raiz do projeto e cole o conteúdo do .env.docker.example:
+7. Crie um arquivo chamado .env.docker na raiz do projeto e cole o conteúdo do .env.docker.example:
 ```console
-
-SECRET_KEY=""
-NAME='nome_db'
-USER='user_db'
-PASSWORD='password_db'
-HOST='host'
-PORT=0000
-
-POSTGRES_PASSWORD=postgres_password
-POSTGRES_USER=postgres_user
-POSTGRES_DB=postgres_db
+DEBUG=
+SECRET_KEY=
+ALLOWED_HOSTS=
 
 
-PGADMIN_DEFAULT_EMAIL=pgadmin_email
-PGADMIN_DEFAULT_PASSWORD=pgadmin_password
+POSTGRES_DB=
+POSTGRES_USER=
+POSTGRES_PASSWORD=
+DB_HOST=
+DB_PORT=
+
+PGADMIN_DEFAULT_EMAIL=
+PGADMIN_DEFAULT_PASSWORD=
+PGADMIN_CONFIG_SERVER_MODE=
 
 ```
 
@@ -42,15 +88,27 @@ PGADMIN_DEFAULT_PASSWORD=pgadmin_password
 
   Certifique-se de revisar e ajustar todas as variáveis de ambiente nos arquivos .env e .env.docker de acordo com a configuração do seu ambiente, como o nome do banco de dados, usuário, senha, host, porta, etc.
 
-3. No terminal, navegue até o diretório do projeto onde o arquivo docker-compose.yml está localizado.
-
-4. Execute o comando a seguir para construir as imagens e iniciar os contêineres:
+7. Execute o comando abaixo para coletar os arquivos estaticos:
 ```console
-
-docker-compose up -d
+python manage.py collectstatic
 ```
 
-5. Após a inicialização bem-sucedida dos contêineres, você poderá acessar o projeto em seu navegador usando o seguinte endereço:
+8. Rodando os containers:
+```console
+docker compose up -d
+```
+
+9. Executando as migrates:
+```console
+docker container ls
+docker container exec -it bitwise_app python manage.py migrate
+```
+10. Rodando os testes:
+```console
+docker container exec -it bitwise_app pytest --cov=user_app
+```
+
+11. Após a inicialização bem-sucedida dos contêineres, você poderá acessar o projeto em seu navegador usando o seguinte endereço:
 
 ```console
 
