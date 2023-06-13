@@ -52,6 +52,7 @@ Nesse caso só será necessário a SECRET_KEY. Copie e cole a variável SECRET_K
 python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
 ```
 Irá ser gerado um uma chave onde você poderá copiar e colar  como valor da SECRET_KEY no seu .env.
+
 6. Crie um arquivo chamado .env na raiz do projeto e cole o conteúdo do .env.example:
 ```console
 
