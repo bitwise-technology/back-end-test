@@ -4,6 +4,7 @@ Repositório dedicado ao desafio da Bitwise.
 ##  Executando o Projeto com Docker Compose
 Este é um guia para executar o projeto usando o Docker Compose. O Docker Compose permite criar e executar o ambiente de desenvolvimento com todas as dependências do projeto de forma fácil e automatizada. Aqui estou usando o Postgres como banco de dados.
 
+
 1. Faça o git clone desse repositorio:
 ```console
 git clone https://github.com/bitwise-technology/back-end-test.git
@@ -320,7 +321,6 @@ pytest --cov=user_app
   ]
 }
 
-
 ```
 - Campos obrigátorios: Username, name e email
 ---
@@ -332,6 +332,7 @@ pytest --cov=user_app
 {
     "login": "thechrisoshow"
 }
+
 
 
 ```
@@ -397,6 +398,7 @@ pytest --cov=user_app
   ```
 
 
+
 ### Atualizando informações de um usuário
 - ##### URL: http://127.0.0.1:8000/api/v1/github_user/update/{id}/
 - ##### Método: PATCH/PUT
@@ -444,7 +446,6 @@ pytest --cov=user_app
 - ##### Método: GET
 - ##### Parâmetros de URL: username do usuário
 
-
 - ##### Response:
 ```console
 
@@ -468,8 +469,7 @@ pytest --cov=user_app
       "following": 14
     }
   ]
-}
 
+- Adicione um endpoint de busca por nome de usuário com paginação.
 
 ```
-
