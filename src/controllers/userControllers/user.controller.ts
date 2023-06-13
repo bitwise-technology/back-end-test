@@ -3,6 +3,7 @@ import { PrismaClient, User } from '@prisma/client';
 import { UserUseCase } from '../../usecases/usersUseCase/userUseCase';
 import { CreateUserDto } from '../../models/user.model';
 import { StatusCodes } from 'http-status-codes';
+import gitHubApi from '../../services/gitHubApi';
 
 export const Prisma = new PrismaClient();
 
@@ -13,7 +14,7 @@ export class UserController {
     this.userUseCase = new UserUseCase();
   }
 
-  public createUser = async (req: Request, res: Response) => {
+  public async createUser(req: Request, res: Response) {
     const createUserDto: CreateUserDto = req.body;
 
     const validationRules = [
@@ -52,5 +53,47 @@ export class UserController {
         message: 'An error occurred while creating the user',
       });
     }
-  };
+  }
+
+  public async createGitHubUser(req: Request, res: Response) {
+    const { username } = req.body;
+
+    const existingUser = await Prisma.user.findUnique({
+      where: { username: username },
+    });
+
+    if (existingUser) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: 'User already exists!' });
+    }
+
+    try {
+      const response = await gitHubApi.get(`/users/${username}`);
+
+      const { data } = response;
+
+      const user: User = await this.userUseCase.createUser({
+        username: data.login,
+        name: data.name,
+        email: data.email ? data.email : `${username}@emailnotfound.com`,
+        profileImageUrl: data.avatar_url,
+        bio: data.bio,
+      });
+
+      res.status(StatusCodes.CREATED).json(user);
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.response && error.response.status === 404) {
+          return res.status(StatusCodes.BAD_REQUEST).json({
+            message: 'User not found on GitHub.',
+          });
+        }
+      }
+
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        message: 'An error occurred while creating the GitHub user',
+      });
+    }
+  }
 }
