@@ -1,4 +1,4 @@
-version: "3.10"
+version: "3.8"
 
 services:
   db:
@@ -7,7 +7,7 @@ services:
     restart: always
     user: postgres
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata_volume:/var/lib/postgresql/data
       - .env.docker:/app/.env
     environment:
       - LC_ALL=C.UTF-8
@@ -15,7 +15,7 @@ services:
       - POSTGRES_USER=POSTGRES_USER
       - POSTGRES_DB=POSTGRES_DB
     ports:
-      - 5432:5432
+      - 5431:5432
     networks:
       - my-network
 
@@ -24,16 +24,16 @@ services:
     image: dpage/pgadmin4
     restart: unless-stopped
     volumes:
-      - pgadmin:/var/lib/pgadmin
+      - pgadmin_volume:/var/lib/pgadmin
       - .env.docker:/app/.env
     environment:
       - PGADMIN_DEFAULT_EMAIL=PGADMIN_DEFAULT_EMAIL
       - PGADMIN_DEFAULT_PASSWORD=PGADMIN_DEFAULT_PASSWORD
+      - PGADMIN_CONFIG_SERVER_MODE = PGADMIN_CONFIG_SERVER_MODE
     ports:
       - 5051:80
     networks:
       - my-network
-
   app:
     build:
       context: .
@@ -69,8 +69,8 @@ services:
       - my-network
 
 volumes:
-  pgdata:
-  pgadmin:
+  pgdata_volume:
+  pgadmin_volume:
 
 networks:
   my-network:
