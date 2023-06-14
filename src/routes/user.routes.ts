@@ -14,5 +14,6 @@ userRoutes.put(
   userController.updateUser.bind(userController),
 );
 userRoutes.get('/:username', userController.findUser.bind(userController));
+userRoutes.get('/', userController.listUsers.bind(userController));
 
 export { userRoutes };
