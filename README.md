@@ -68,7 +68,7 @@ O diretorio src é dividido da seguinte maneira:
 
 ### Passo 3:
 
-> Para conectar com o banco de dados escreva a linha encontrada como exemplo no arquivo [.env.example] (./.env.local.example)
+> Para conectar com o banco de dados escreva a linha encontrada como exemplo no arquivo **.env.local.example**
 
 ### Passo 4:
 
