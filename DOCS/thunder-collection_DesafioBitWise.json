@@ -1,0 +1,94 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "DesafioBitWise",
+    "dateExported": "2023-06-14T13:07:04.129Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "c13c98a2-8505-4acd-a0ff-085ebb56271e",
+            "colId": "c258325f-f5c2-4394-bba5-9baecf41e8e7",
+            "containerId": "",
+            "name": "Create User",
+            "url": "http://localhost:3333/user",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-06-14T13:06:06.447Z",
+            "modified": "2023-06-14T13:06:06.447Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n\t\"username\": \"\",\n\t\"name\": \"\",\n\t\"lastName\": \"\",\n\t\"email\": \"\",\n\t\"bio\": \"\",\n\t\"gender\": \"\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "42ebaebe-d37b-4db3-83d0-3c6e106df76d",
+            "colId": "c258325f-f5c2-4394-bba5-9baecf41e8e7",
+            "containerId": "",
+            "name": "Create User With Github",
+            "url": "http://localhost:3333/user/github",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-06-14T13:06:30.350Z",
+            "modified": "2023-06-14T13:06:30.351Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n\t\"username\": \"\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "25522bfd-a59e-4139-94d0-d7e28c3052e7",
+            "colId": "c258325f-f5c2-4394-bba5-9baecf41e8e7",
+            "containerId": "",
+            "name": "Update User",
+            "url": "http://localhost:3333/user/update/:username",
+            "method": "PUT",
+            "sortNum": 30000,
+            "created": "2023-06-14T13:06:40.244Z",
+            "modified": "2023-06-14T13:06:40.244Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n\t\"username\": \"\",\n\t\"name\": \"\",\n\t\"lastName\": \"\",\n\t\"email\": \"\",\n\t\"bio\": \"\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "8024a8ec-6110-4c87-97dd-0579e7ac818a",
+            "colId": "c258325f-f5c2-4394-bba5-9baecf41e8e7",
+            "containerId": "",
+            "name": "Find User",
+            "url": "http://localhost:3333/user/:username",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2023-06-14T13:06:44.074Z",
+            "modified": "2023-06-14T13:06:44.074Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "cef4e928-03c0-4d24-bb4f-59cdcf4a642f",
+            "colId": "c258325f-f5c2-4394-bba5-9baecf41e8e7",
+            "containerId": "",
+            "name": "List Users",
+            "url": "http://localhost:3333/user/",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2023-06-14T13:06:47.408Z",
+            "modified": "2023-06-14T13:06:47.408Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ]
+}

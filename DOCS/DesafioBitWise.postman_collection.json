@@ -1,0 +1,117 @@
+{
+	"info": {
+		"_postman_id": "cddbc3fe-2ed8-40d2-845e-0df1139723d5",
+		"name": "DesafioBitWise",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "27986356"
+	},
+	"item": [
+		{
+			"name": "List Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:3333/user/"
+			},
+			"response": []
+		},
+		{
+			"name": "Find Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3333/user/:username",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3333",
+					"path": [
+						"user",
+						":username"
+					],
+					"variable": [
+						{
+							"key": "username",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Users",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"\",\n\t\"name\": \"\",\n\t\"lastName\": \"\",\n\t\"email\": \"\",\n\t\"bio\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3333/user/update/:username",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3333",
+					"path": [
+						"user",
+						"update",
+						":username"
+					],
+					"variable": [
+						{
+							"key": "username",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User With Github",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3333/user/github"
+			},
+			"response": []
+		},
+		{
+			"name": "Create User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"\",\n\t\"name\": \"\",\n\t\"lastName\": \"\",\n\t\"email\": \"\",\n\t\"bio\": \"\",\n\t\"gender\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3333/user"
+			},
+			"response": []
+		}
+	]
+}

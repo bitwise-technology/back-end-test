@@ -23,7 +23,11 @@ A documentação de rotas com Swagger pode ser encontrada em [http://localhost:3
 
 - [[Project] - Diagrama de relação de entidades](./DOCS/ERD.png)
 
-- [[Project] - Coleção da API para imsomnia](./DOCS/Insomnia_2023-06-13.json)
+- [[Project] - Coleção da API para imsomnia](./DOCS/Insomnia_2023-06-14.json)
+
+- [[Project] - Coleção da API para Thunder Client](./DOCS/thunder-collection_DesafioBitWise.json)
+
+- [[Project] - Coleção da API para Postman](./DOCS/DesafioBitWise.postman_collection.json)
 
 ## 📑 Sobre
 
