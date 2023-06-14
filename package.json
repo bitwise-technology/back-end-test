@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev --exit-child --transpile-only --ignore-watch node_modules src/server.ts",
-    "migrate": "npx prisma migrate dev"
+    "start": "prisma migrate dev && npm run dev"
   },
   "repository": {
     "type": "git",
