@@ -12,7 +12,7 @@
 - [📖 Documentação](#-documentacao)
 - [📑 Sobre o projeto](#-sobre)
 - [📥 Gerenciador de pacotes](#-pacotes)
-- [📑 Estrutura do projeto](#📑-estrutura-do-projeto)
+- [📑 Estrutura do projeto](#📑-estrutura)
 - [🚀 Começando](#-comecando)
 
 ## 📖 Documentação
@@ -43,7 +43,7 @@ O projeto foi desenvolvido utilizando NPM, mas você pode utilizar qualquer um d
 - PNPM
 - NPM
 
-# 📑 Estrutura do projeto
+# 📑 Estrutura
 O diretorio src é dividido da seguinte maneira:
 ```
 ├── controllers
