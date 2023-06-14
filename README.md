@@ -17,6 +17,8 @@
 
 ## 📖 Documentação
 
+A documentação de rotas com Swagger pode ser encontrada em [http://localhost:3333/docs/](http://localhost:3333/docs/)
+
 - [[Project] - Diagrama de classes](./DOCS/diagram.png)
 
 - [[Project] - Diagrama de relação de entidades](./DOCS/ERD.png)
