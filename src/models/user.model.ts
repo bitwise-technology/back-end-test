@@ -1,6 +1,6 @@
 import { Gender, Prisma } from "@prisma/client";
 
-export interface User{
+export interface User {
   id: string;
   username: string;
   name: string;
