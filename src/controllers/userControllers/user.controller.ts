@@ -62,7 +62,9 @@ export class UserController {
       userData.gender !== 'Female' &&
       userData.gender !== undefined
     ) {
-      return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Not a valid gender' });
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: 'Not a valid gender' });
     }
 
     try {
@@ -145,7 +147,9 @@ export class UserController {
       updateUserData.gender !== 'Female' &&
       updateUserData.gender !== undefined
     ) {
-      return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Not a valid gender' });
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: 'Not a valid gender' });
     }
 
     try {
@@ -228,6 +232,17 @@ export class UserController {
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ message: 'Internal server error.' });
+    }
+  }
+
+  public async listUsers(req: Request, res: Response) {
+    try {
+      const users = await prisma.user.findMany();
+      res.status(StatusCodes.OK).json(users);
+    } catch (error) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        message: 'An error occurred while retrieving the users',
+      });
     }
   }
 }
