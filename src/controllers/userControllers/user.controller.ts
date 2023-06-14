@@ -1,31 +1,39 @@
 import { Request, Response } from 'express';
-import { Prisma, PrismaClient, User } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import { UserUseCase } from '../../usecases/usersUseCase/userUseCase';
 import { CreateUserDto, UpdateUserDto } from '../../models/user.model';
 import { StatusCodes } from 'http-status-codes';
 import gitHubApi from '../../services/gitHubApi';
 
-export const prisma = new PrismaClient();
+// Create a new instance of the Prisma client
+const prisma = new PrismaClient();
 
+// Define a class for the user controller
 export class UserController {
+  // Create a private instance of the UserUseCase class
   private readonly userUseCase: UserUseCase;
 
+  // Initialize the userUseCase instance in the constructor
   constructor() {
     this.userUseCase = new UserUseCase();
   }
 
+  // Create a new user
   public async createUser(req: Request, res: Response) {
-    const createUserDto: CreateUserDto = req.body;
+    // Extract the user data from the request body
+    const userData: CreateUserDto = req.body;
 
+    // Define the validation rules for required fields
     const validationRules = [
       { field: 'username', required: true },
       { field: 'name', required: true },
       { field: 'email', required: true },
     ];
 
+    // Check the required fields
     for (const rule of validationRules) {
       const { field, required } = rule;
-      const value = (createUserDto as Record<string, any>)[field];
+      const value = (userData as Record<string, any>)[field];
 
       if (required && !value) {
         return res.status(StatusCodes.BAD_REQUEST).json({
@@ -34,22 +42,31 @@ export class UserController {
       }
     }
 
+    // Check if user already exists
+    const existingUsername = await prisma.user.findUnique({
+      where: { username: userData.username },
+    });
+
+    const existingEmail = await prisma.user.findUnique({
+      where: { email: userData.email },
+    });
+
+    if (existingUsername || existingEmail) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: 'User already exists!' });
+    }
+
+    if (
+      userData.gender !== 'Male' &&
+      userData.gender !== 'Female' &&
+      userData.gender !== undefined
+    ) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Not a valid gender' });
+    }
+
     try {
-      const existingUsername = await prisma.user.findUnique({
-        where: { username: createUserDto.username },
-      });
-
-      const existingEmail = await prisma.user.findUnique({
-        where: { email: createUserDto.email },
-      });
-
-      if (existingUsername || existingEmail) {
-        return res
-          .status(StatusCodes.BAD_REQUEST)
-          .json({ error: 'User already exists!' });
-      }
-
-      const user: User = await this.userUseCase.create(createUserDto);
+      const user: User = await this.userUseCase.create(userData);
       res.status(StatusCodes.CREATED).json(user);
     } catch (error) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
@@ -58,9 +75,12 @@ export class UserController {
     }
   }
 
+  // Create a new user using their GitHub username
   public async createGitHubUser(req: Request, res: Response) {
+    // Extract the GitHub username from the request body
     const { username } = req.body;
 
+    // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { username: username },
     });
@@ -71,6 +91,7 @@ export class UserController {
         .json({ error: 'User already exists!' });
     }
 
+    // Get user data from the GitHub API
     try {
       const response = await gitHubApi.get(`/${username}`);
 
@@ -98,7 +119,9 @@ export class UserController {
     }
   }
 
+  // Update an existing user
   public async updateUser(req: Request, res: Response) {
+    // Extract the username from the request parameters
     const { username } = req.params;
     const updateUserData = req.body;
     const validationRules = [
@@ -117,6 +140,14 @@ export class UserController {
       }
     }
 
+    if (
+      updateUserData.gender !== 'Male' &&
+      updateUserData.gender !== 'Female' &&
+      updateUserData.gender !== undefined
+    ) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Not a valid gender' });
+    }
+
     try {
       const user = await prisma.user.findUnique({
         where: { username },
@@ -132,12 +163,11 @@ export class UserController {
         where: { email: updateUserData.email },
       });
 
+      // Check if email address is already associated with another account
       if (conflictingUser && updateUserData.email !== user.email) {
-        return res
-          .status(StatusCodes.BAD_REQUEST)
-          .json({
-            error: 'Email address already associated with another account.',
-          });
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          error: 'Email address already associated with another account.',
+        });
       }
 
       const updatedUser = await this.userUseCase.update(
@@ -149,6 +179,55 @@ export class UserController {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
         message: 'An error occurred while updating the user',
       });
+    }
+  }
+
+  // Find a user with their username
+  public async findUser(req: Request, res: Response) {
+    // Extract username from the request parameters
+    const { username } = req.params;
+
+    interface UserWithGitHubData extends User {
+      followers: number;
+      following: number;
+      public_repos: number;
+      public_url_user: string;
+    }
+
+    try {
+      const user = await prisma.user.findUnique({
+        where: { username },
+      });
+
+      if (!user) {
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ error: 'User not found' });
+      }
+
+      let userData: UserWithGitHubData = { ...user } as UserWithGitHubData;
+
+      try {
+        const response = await gitHubApi.get(`/${username}`);
+        const { data } = response;
+
+        userData = {
+          ...user,
+          followers: data.followers,
+          following: data.following,
+          public_repos: data.public_repos,
+          public_url_user: data.html_url,
+        };
+      } catch (error) {
+        console.warn(`GitHub user ${username} not found`);
+      }
+
+      return res.status(StatusCodes.OK).json(userData);
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ message: 'Internal server error.' });
     }
   }
 }
