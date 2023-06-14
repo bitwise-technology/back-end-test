@@ -13,6 +13,9 @@ export class UserController {
   // Create a private instance of the UserUseCase class
   private readonly userUseCase: UserUseCase;
 
+  // Define a regex pattern for email validation
+  private EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
+
   // Initialize the userUseCase instance in the constructor
   constructor() {
     this.userUseCase = new UserUseCase();
@@ -65,6 +68,12 @@ export class UserController {
       return res
         .status(StatusCodes.BAD_REQUEST)
         .json({ error: 'Not a valid gender' });
+    }
+
+    if (!this.EMAIL_PATTERN.test(userData.email)) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: 'Invalid email address',
+      });
     }
 
     try {
@@ -150,6 +159,12 @@ export class UserController {
       return res
         .status(StatusCodes.BAD_REQUEST)
         .json({ error: 'Not a valid gender' });
+    }
+
+    if (!this.EMAIL_PATTERN.test(updateUserData.email)) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: 'Invalid email address',
+      });
     }
 
     try {
