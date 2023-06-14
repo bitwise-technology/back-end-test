@@ -49,7 +49,7 @@ export class UserController {
           .json({ error: 'User already exists!' });
       }
 
-      const user: User = await this.userUseCase.createUser(createUserDto);
+      const user: User = await this.userUseCase.create(createUserDto);
       res.status(StatusCodes.CREATED).json(user);
     } catch (error) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
@@ -76,7 +76,7 @@ export class UserController {
 
       const { data } = response;
 
-      const user: User = await this.userUseCase.createUser({
+      const user: User = await this.userUseCase.create({
         username: data.login,
         name: data.name ? data.name : 'User does not have name',
         email: data.email ? data.email : `${username}@emailnotfound.com`,
@@ -140,7 +140,7 @@ export class UserController {
           });
       }
 
-      const updatedUser = await this.userUseCase.updateUser(
+      const updatedUser = await this.userUseCase.update(
         updateUserData,
         username,
       );
