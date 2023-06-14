@@ -9,8 +9,8 @@
   <img src="https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white"/>
 </p>
 
-- [📑 Sobre o projeto](#-sobre)
 - [📖 Documentação](#-documentacao)
+- [📑 Sobre o projeto](#-sobre)
 - [📥 Gerenciador de pacotes](#-pacotes)
 - [📑 Estrutura do projeto](#📑-estrutura-do-projeto)
 - [🚀 Começando](#-comecando)
